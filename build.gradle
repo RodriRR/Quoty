@@ -4,6 +4,7 @@ buildscript {
         compose_version = '1.0.0-alpha01'
     }
     ext.kotlin_version = "1.4.0"
+    ext.koin_version = "2.1.5"
     repositories {
         google()
         jcenter()
