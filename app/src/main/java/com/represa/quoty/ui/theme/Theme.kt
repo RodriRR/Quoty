@@ -1,4 +1,4 @@
-package com.represa.quoty.ui
+package com.represa.quoty.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme

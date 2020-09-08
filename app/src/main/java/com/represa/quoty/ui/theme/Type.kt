@@ -1,4 +1,4 @@
-package com.represa.quoty.ui
+package com.represa.quoty.ui.theme
 
 import androidx.compose.material.Typography
 import androidx.compose.ui.text.TextStyle
