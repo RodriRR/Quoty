@@ -38,7 +38,7 @@ fun Main() {
         Crossfade(currentSection) { section ->
             when (section) {
                 Home -> Home()
-                HomeSection.Fav -> Login()
+                //HomeSection.Fav -> Login()
             }
         }
     }
