@@ -21,19 +21,18 @@ class MainActivity : AppCompatActivity() {
 
         val screen = "Home"
 
-        Repository.login.observe(this, Observer {
+        /*Repository.login.observe(this, Observer {
             when(it){
                 LoginStatus.LOGIN_SUCCESS -> Toast.makeText(this, "SUCESS", Toast.LENGTH_SHORT).show()
                 LoginStatus.LOGIN_ERROR -> Toast.makeText(this, "ERROR", Toast.LENGTH_SHORT).show()
             }
-        })
+        })*/
 
         setContent {
             QuotyTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
                     when(screen){
-                        "Login" -> Login()
                         "Home" -> Main()
                     }
                 }
