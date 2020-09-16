@@ -1,11 +1,7 @@
 package com.represa.quoty.ui.screen
 
-import android.widget.ProgressBar
 import androidx.compose.foundation.Text
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.layout.ColumnScope.gravity
-import androidx.compose.foundation.layout.RowScope.gravity
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
 import androidx.compose.material.CircularProgressIndicator
@@ -14,25 +10,27 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.ContextAmbient
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.viewModel
-import com.represa.quoty.data.Repository
 import com.represa.quoty.data.model.LoginStatus
 import com.represa.quoty.ui.viewmodel.LoginViewModel
-import kotlinx.coroutines.launch
 
 @Composable
 fun Login(viewModel: LoginViewModel) {
 
     var user = remember { mutableStateOf("user") }
     var password = remember { mutableStateOf("password") }
+    var email = remember { mutableStateOf("email") }
+
+    var isSignUp = remember { mutableStateOf(false)}
 
     Stack {
         Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center) {
             Row(
                 Modifier.gravity(Alignment.CenterHorizontally).padding(0.dp, 6.dp)
             ) { LoginTextField(user, "user") }
+            Row(
+                Modifier.gravity(Alignment.CenterHorizontally).padding(0.dp, 6.dp)
+            ) { SignUp(email, "email", isSignUp) }
             Row(
                 Modifier.gravity(Alignment.CenterHorizontally).padding(0.dp, 6.dp)
             ) { LoginTextField(password, "pass") }
@@ -43,6 +41,10 @@ fun Login(viewModel: LoginViewModel) {
                     viewModel::login
                 )
             }
+            Row(Modifier.gravity(Alignment.CenterHorizontally).padding(0.dp, 6.dp)) {
+                Button(onClick = {isSignUp.value = !isSignUp.value}) {
+                     Text(text = "SignUp")}
+                }
         }
         progressBar(viewModel.prueba)
     }
@@ -89,4 +91,15 @@ fun LoginTextField(credential: MutableState<String>, label: String) {
         onValueChange = { credential.value = it },
         label = { Text(text = label) }
     )
+}
+
+@Composable
+fun SignUp(credential: MutableState<String>, label: String, isSignUp: MutableState<Boolean>) {
+    if(isSignUp.value) {
+        TextField(
+            value = credential.value,
+            onValueChange = { credential.value = it },
+            label = { Text(text = label) }
+        )
+    }
 }
