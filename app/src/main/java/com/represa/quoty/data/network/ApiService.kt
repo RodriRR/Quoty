@@ -2,6 +2,7 @@ package com.represa.quoty.data.network
 
 import com.represa.quoty.data.model.Credentials
 import com.represa.quoty.data.model.Token
+import com.represa.quoty.data.model.User
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import retrofit2.Retrofit
@@ -35,7 +36,7 @@ interface ApiService {
 
     @Headers("Content-Type: application/json")
     @POST("session")
-    suspend fun createSession(@Header("Authorization") authHeader: String, @Body body: Credentials): Token
+    suspend fun createSession(@Header("Authorization") authHeader: String, @Body body: User): Token
 
     /*@Headers("Content-Type: application/json")
     @POST("users")
