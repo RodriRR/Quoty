@@ -1,6 +1,7 @@
 package com.represa.quoty.data.network
 
 import com.represa.quoty.data.model.Credentials
+import com.represa.quoty.data.model.ResponseQuotes
 import com.represa.quoty.data.model.Token
 import com.represa.quoty.data.model.User
 import com.squareup.moshi.Moshi
@@ -37,6 +38,10 @@ interface ApiService {
     @Headers("Content-Type: application/json")
     @POST("session")
     suspend fun createSession(@Header("Authorization") authHeader: String, @Body body: User): Token
+
+    @Headers("Content-Type: application/json")
+    @GET("quotes")
+    suspend fun getQuotes(@Header("Authorization") authHeader: String, @Query("filter") filter: String): ResponseQuotes
 
     /*@Headers("Content-Type: application/json")
     @POST("users")
