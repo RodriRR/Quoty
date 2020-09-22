@@ -1,6 +1,6 @@
-package com.represa.quoty.data.model
+package com.represa.quoty.data.model.network
 
-data class Quote(
+data class QuoteNetwork(
     var id: Int,
     var dialogue: Boolean,
     var private: Boolean,
@@ -17,5 +17,5 @@ data class Quote(
 data class ResponseQuotes(
     var page: Int,
     var last_page: Boolean,
-    var quotes: List<Quote>
+    var quotes: List<QuoteNetwork>
 )

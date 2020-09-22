@@ -1,4 +1,4 @@
-package com.represa.quoty.data.model
+package com.represa.quoty.data.model.network
 
 data class User(
         var user: UserParameters

@@ -1,4 +1,4 @@
-package com.represa.quoty.data.model
+package com.represa.quoty.data.model.network
 
 import com.squareup.moshi.Json
 
