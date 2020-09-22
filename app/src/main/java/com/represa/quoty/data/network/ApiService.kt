@@ -1,9 +1,8 @@
 package com.represa.quoty.data.network
 
-import com.represa.quoty.data.model.Credentials
-import com.represa.quoty.data.model.ResponseQuotes
-import com.represa.quoty.data.model.Token
-import com.represa.quoty.data.model.User
+import com.represa.quoty.data.model.network.ResponseQuotes
+import com.represa.quoty.data.model.network.Token
+import com.represa.quoty.data.model.network.User
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import retrofit2.Retrofit
