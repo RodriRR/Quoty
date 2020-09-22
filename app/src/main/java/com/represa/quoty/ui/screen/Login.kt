@@ -2,35 +2,29 @@ package com.represa.quoty.ui.screen
 
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.AlertDialog
-import androidx.compose.material.Button
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.TextField
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.represa.quoty.data.model.LoginStatus
+import com.represa.quoty.data.model.network.LoginStatus
 import com.represa.quoty.ui.viewmodel.LoginViewModel
 
 @Composable
 fun Login(viewModel: LoginViewModel) {
 
-    var user = remember { mutableStateOf("user") }
-    var password = remember { mutableStateOf("password") }
-    var email = remember { mutableStateOf("email") }
+    var user = remember { mutableStateOf("rodrire") }
+    var password = remember { mutableStateOf("123456") }
 
-    var isSignUp = remember { mutableStateOf(false)}
+    val drawerState = rememberBottomDrawerState(BottomDrawerValue.Closed)
 
     Stack {
+
         Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center) {
             Row(
                 Modifier.gravity(Alignment.CenterHorizontally).padding(0.dp, 6.dp)
             ) { LoginTextField(user, "user") }
-            Row(
-                Modifier.gravity(Alignment.CenterHorizontally).padding(0.dp, 6.dp)
-            ) { SignUp(email, "email", isSignUp) }
             Row(
                 Modifier.gravity(Alignment.CenterHorizontally).padding(0.dp, 6.dp)
             ) { LoginTextField(password, "pass") }
@@ -42,12 +36,21 @@ fun Login(viewModel: LoginViewModel) {
                 )
             }
             Row(Modifier.gravity(Alignment.CenterHorizontally).padding(0.dp, 6.dp)) {
-                Button(onClick = {isSignUp.value = !isSignUp.value}) {
+                Button(onClick = { drawerState.expand()
+                }) {
                      Text(text = "SignUp")}
                 }
         }
         progressBar(viewModel.prueba)
     }
+
+    /*BottomDrawerLayout(drawerState = drawerState,
+        drawerContent = {
+            // add your UI code
+        }, bodyContent = {
+            // add your UI code
+        }
+    )*/
 
 }
 

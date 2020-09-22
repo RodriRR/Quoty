@@ -7,18 +7,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material.*
 import androidx.compose.ui.platform.setContent
 import androidx.lifecycle.Observer
-import com.represa.quoty.data.Repository
-import com.represa.quoty.data.model.LoginStatus
-import com.represa.quoty.ui.screen.Home
+import com.represa.quoty.data.model.network.LoginStatus
 import com.represa.quoty.ui.screen.Login
-import com.represa.quoty.ui.screen.Main
 import com.represa.quoty.ui.theme.QuotyTheme
 import com.represa.quoty.ui.viewmodel.LoginViewModel
-import androidx.activity.viewModels
+import org.koin.android.viewmodel.ext.android.viewModel
+
 
 class LoginActivity : AppCompatActivity() {
 
-    private val viewModel: LoginViewModel by viewModels()
+    private val mainViewModel : LoginViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,16 +30,16 @@ class LoginActivity : AppCompatActivity() {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
                     when(screen){
-                        "Login" -> Login(viewModel)
-                        "Home" -> Main()
+                        "Login" -> Login(mainViewModel)
+                        //"Home" -> Main()
                     }
                 }
             }
         }
     }
 
-    fun startObservers(){
-        viewModel.login.observe(this, Observer {
+    private fun startObservers(){
+        mainViewModel.login.observe(this, Observer {
             when (it) {
                 //LoginStatus.LOGIN_LOAD -> setContent { CircularProgressIndicator() }
                 LoginStatus.LOGIN_SUCCESS -> {
