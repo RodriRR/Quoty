@@ -1,28 +1,42 @@
 package com.represa.quoty.ui.screen
 
+import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumnFor
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.TopAppBar
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.material.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.represa.quoty.data.model.database.QuoteDatabase
 import com.represa.quoty.ui.components.MainCard
 import com.represa.quoty.ui.viewmodel.MainViewModel
 
 @Composable
 fun Home(viewModel: MainViewModel) {
 
-    Scaffold(
-            topBar = { Toolbar() }) {
+    var search = remember { mutableStateOf("") }
 
-        LazyColumnFor(
-            items = viewModel.prueba,
-            itemContent = { MainCard() }
-        )
+    var prueba = viewModel.flow.collectAsState(initial = emptyList())
+
+    Scaffold(
+        topBar = { TopBar(search, viewModel)} ){
+            LazyColumnFor(
+                items = prueba.value,
+                itemContent = { MainCard(it) }
+            )
+        }
+
+}
+
+@Composable
+fun TopBar(search : MutableState<String>, viewModel: MainViewModel){
+    Column {
+        TextField(value = search.value, onValueChange = { search.value = it }, label = { Text(text = "search" ) })
+        Button(onClick = { viewModel.getQuotes(search.value)  }) {
+            Text(text = "Search")
+        }
+
     }
 }
 
