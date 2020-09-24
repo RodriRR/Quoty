@@ -23,16 +23,20 @@ class Repository(private val QDatabase : QDatabase) {
         }
     }
 
-    suspend fun fetchQuotes() : List<QuoteNetwork> {
-        return FavQsApi.RETROFIT_SERVICE.getQuotes(token, "god").quotes
+    suspend fun fetchQuotes(search : String) : List<QuoteNetwork> {
+        return FavQsApi.RETROFIT_SERVICE.getQuotes(token, search).quotes
     }
 
     fun insert(quote : QuoteDatabase){
-        QDatabase.quoteDao().insertNewTask(quote)
+        QDatabase.quoteDao().insertQuote(quote)
+    }
+
+    fun insertListOfQuotes(quotes : List<QuoteDatabase>){
+        QDatabase.quoteDao().insertListOfQuotes(quotes)
     }
 
     fun prueba() : Flow<List<QuoteDatabase>>{
-        return QDatabase.quoteDao().getCategories()
+        return QDatabase.quoteDao().getAllQuotes()
     }
 
     fun clear(){
