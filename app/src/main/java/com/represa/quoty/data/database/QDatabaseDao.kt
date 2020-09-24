@@ -11,9 +11,12 @@ import kotlinx.coroutines.flow.Flow
 interface QDatabaseDao {
 
     @Query("SELECT * FROM quotes")
-    fun getCategories(): Flow<List<QuoteDatabase>>
+    fun getAllQuotes(): Flow<List<QuoteDatabase>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertNewTask(quote: QuoteDatabase)
+    fun insertQuote(quote: QuoteDatabase)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertListOfQuotes(quote: List<QuoteDatabase>)
 
 }
