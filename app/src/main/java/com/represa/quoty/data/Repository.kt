@@ -35,8 +35,9 @@ class Repository(private val QDatabase : QDatabase) {
         QDatabase.quoteDao().insertListOfQuotes(quotes)
     }
 
-    fun prueba() : Flow<List<QuoteDatabase>>{
-        return QDatabase.quoteDao().getAllQuotes()
+    fun prueba(search : String) : Flow<List<QuoteDatabase>>{
+        var r = QDatabase.quoteDao().getPrueba(search)
+        return r
     }
 
     fun clear(){
