@@ -17,6 +17,7 @@ fun Home(viewModel: MainViewModel) {
 
     var search = remember { mutableStateOf("") }
 
+
     var prueba = viewModel.flow.collectAsState(initial = emptyList())
 
     Scaffold(
@@ -32,7 +33,7 @@ fun Home(viewModel: MainViewModel) {
 @Composable
 fun TopBar(search : MutableState<String>, viewModel: MainViewModel){
     Column {
-        TextField(value = search.value, onValueChange = { search.value = it }, label = { Text(text = "search" ) })
+        TextField(value = search.value, onValueChange = { it -> viewModel.setSearchQuery(it); search.value = it }, label = { Text(text = "search" ) })
         Button(onClick = { viewModel.getQuotes(search.value)  }) {
             Text(text = "Search")
         }

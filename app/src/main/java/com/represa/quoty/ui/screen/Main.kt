@@ -25,11 +25,6 @@ fun Main(viewModel: MainViewModel) {
 
     Scaffold(
         topBar = {
-            Button(onClick = {
-                    viewModel.getQuotes()
-            }) {
-                Text(text = "Search")
-            }
         },
         bottomBar = {
             BottomBar(
