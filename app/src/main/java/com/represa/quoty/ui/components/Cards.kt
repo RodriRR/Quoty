@@ -11,13 +11,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.ui.tooling.preview.Preview
+import com.represa.quoty.data.model.database.QuoteDatabase
 
-@Preview
+
 @Composable
-fun MainCard(){
+fun MainCard(quote : QuoteDatabase){
     Card(Modifier.fillMaxWidth().preferredHeight(50.dp).background(Color.Red)) {
         Column() {
-            Text(text = "holaaaaaaa")
+            Text(text = quote.body)
         }
     }
 }
