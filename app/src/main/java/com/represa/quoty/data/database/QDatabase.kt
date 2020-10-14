@@ -10,7 +10,7 @@ import com.represa.quoty.data.model.database.QuoteDatabase
  * A database that stores Tas and Categories information.
  * And a global method to get access to the database.
  */
-@Database(entities = [QuoteDatabase::class], version = 1, exportSchema = false)
+@Database(entities = [QuoteDatabase::class], version = 2, exportSchema = false)
 public abstract class QDatabase : RoomDatabase() {
 
     abstract fun quoteDao(): QDatabaseDao
@@ -31,7 +31,7 @@ public abstract class QDatabase : RoomDatabase() {
                     context.applicationContext,
                     QDatabase::class.java,
                     "quote_database"
-                ).build()
+                ).fallbackToDestructiveMigration().build()
                 INSTANCE = instance
                 return instance
             }
