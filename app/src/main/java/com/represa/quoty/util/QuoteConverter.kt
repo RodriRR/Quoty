@@ -18,6 +18,6 @@ object QuoteConverter{
             quoteNetwork.downvotes_count,
             quoteNetwork.author,
             quoteNetwork.body,
-            image.urls.regular)
+            image.urls.small)
     }
 }
