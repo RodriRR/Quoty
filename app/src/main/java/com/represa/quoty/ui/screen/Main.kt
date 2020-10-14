@@ -49,7 +49,7 @@ private fun BottomBar(
         currentSection: HomeSection,
         onSectionSelected: (HomeSection) -> Unit,
 ) {
-    BottomNavigation(
+    /*BottomNavigation(
             modifier = Modifier.height(24.dp),
             backgroundColor = MaterialTheme.colors.background,
             contentColor = contentColor()
@@ -72,7 +72,7 @@ private fun BottomBar(
                     alwaysShowLabels = false
             )
         }
-    }
+    }*/
 }
 
 private enum class HomeSection(
