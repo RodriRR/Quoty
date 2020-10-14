@@ -19,7 +19,7 @@ interface QDatabaseDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertQuote(quote: QuoteDatabase)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.ABORT)
     fun insertListOfQuotes(quote: List<QuoteDatabase>)
 
 }
