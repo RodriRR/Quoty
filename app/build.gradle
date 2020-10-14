@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'kotlin-android-extensions'
     id 'kotlin-kapt'
 }
 
@@ -46,6 +47,9 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion compose_version
         kotlinCompilerVersion '1.4.0'
+    }
+    androidExtensions {
+        experimental = true
     }
 }
 
@@ -93,6 +97,9 @@ dependencies {
     //Kotlin Coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlin_coroutines_version"
 
+    //Coil
+    implementation "dev.chrisbanes.accompanist:accompanist-coil:0.3.0"
+
     //Koin
     // Koin for Android
     implementation "org.koin:koin-android:$koin_version"
@@ -100,7 +107,6 @@ dependencies {
     implementation "org.koin:koin-android-scope:$koin_version"
     // or Koin for Android Architecture ViewModel
     implementation "org.koin:koin-android-viewmodel:$koin_version"
-
 
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
