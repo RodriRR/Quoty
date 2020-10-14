@@ -47,13 +47,13 @@ fun QuoteCard(quote : QuoteDatabase){
                 end.linkTo(parent.end)
                 bottom.linkTo(parent.bottom)})
 
-            /*Box( modifier = Modifier.fillMaxSize().background(color = Color.Black).constrainAs(filter) {
+            Box( modifier = Modifier.fillMaxSize().background(color = Color(0x4D000000)).constrainAs(filter) {
                 top.linkTo(parent.top)
                 start.linkTo(parent.start)
                 end.linkTo(parent.end)
-                bottom.linkTo(parent.bottom)})*/
+                bottom.linkTo(parent.bottom)})
 
-            Text( text = quote.body , color = Color.White ,textAlign = TextAlign.Center, modifier =  Modifier.padding(10.dp).constrainAs(text){
+            Text( text = quote.body, color = Color.White ,textAlign = TextAlign.Center, modifier =  Modifier.padding(10.dp).constrainAs(text){
                 top.linkTo(parent.top)
                 start.linkTo(parent.start)
                 end.linkTo(parent.end)
