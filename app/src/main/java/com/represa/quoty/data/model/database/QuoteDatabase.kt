@@ -19,6 +19,7 @@ data class QuoteDatabase(
     var upvotes_count: Int,
     var downvotes_count: Int,
     var author: String,
-    var body: String
+    var body: String,
+    var image: String
 )
 
