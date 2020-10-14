@@ -18,22 +18,16 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
 
     private val SEARCH_DELAY_MILLIS = 1000L
 
-    var search by mutableStateOf("god")
+    var search by mutableStateOf("")
 
-
-    var prueba by mutableStateOf(listOf<String>())
-        private set
+    /*var prueba by mutableStateOf(listOf<String>())
+        private set*/
 
     private val searchChanel = ConflatedBroadcastChannel<String>()
 
     val flow = searchChanel.asFlow().debounce(SEARCH_DELAY_MILLIS).flatMapLatest { search ->
-        //if (search.isNotEmpty()) {
-            getQuotes(search)
-            repository.prueba(search)
-        //}else{
-          //  var r = emptyList<QuoteDatabase>()
-            //r.asFlow()
-        //}
+        getQuotes(search)
+        repository.searchQuotes(search)
     }.flowOn(Dispatchers.IO)
 
     init {
@@ -45,35 +39,31 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
         searchChanel.offer(search)
     }
 
-
-    private fun clearDatabase(){
-        viewModelScope.launch(Dispatchers.IO){
+    private fun clearDatabase() {
+        viewModelScope.launch(Dispatchers.IO) {
             repository.clear()
         }
     }
 
-    private fun getQuotes(search : String){
-        if(!search.isNullOrEmpty()) {
+    private fun getQuotes(search: String) {
+        if (!search.isNullOrEmpty()) {
             viewModelScope.launch(Dispatchers.IO) {
                 try {
-                    var response = repository.fetchQuotes(search) //.map { quote ->
-                        //var image = getRandomImage()
-                        //QuoteConverter.quoteNetworkToDatabase(quote, "image")
-                    //}
+                    var response = repository.fetchQuotes(search)
                     var images = getRandomImages(response.size)
-                    var quotes : MutableList<QuoteDatabase> = mutableListOf()
-                    for(i in response.indices){
+                    var quotes: MutableList<QuoteDatabase> = mutableListOf()
+                    for (i in response.indices) {
                         quotes.add(QuoteConverter.quoteNetworkToDatabase(response[i], images[i]))
                     }
                     repository.insertListOfQuotes(quotes)
-                }catch(e : Exception){
+                } catch (e: Exception) {
                     println(e)
                 }
             }
         }
     }
 
-    private suspend fun getRandomImages(quantity : Int) : List<Image>{
+    private suspend fun getRandomImages(quantity: Int): List<Image> {
         return repository.getRandomImages(search, quantity)
     }
 }

@@ -19,16 +19,20 @@ class Repository(private val QDatabase : QDatabase) {
 
     suspend fun login(user : String, password : String) : LoginStatus {
         val userCredentials = User(UserParameters(user, password))
-        try {
+        return try {
             var response = QuoteApi.QUOTE_SERVICE.createSession(token, userCredentials)
-            return LoginStatus.LOGIN_SUCCESS
+            LoginStatus.LOGIN_SUCCESS
         }catch (e : Exception){
-            return LoginStatus.LOGIN_ERROR
+            LoginStatus.LOGIN_ERROR
         }
     }
 
     suspend fun fetchQuotes(search : String) : List<QuoteNetwork> {
         return QuoteApi.QUOTE_SERVICE.getQuotes(token, search).quotes
+    }
+
+    fun searchQuotes(search : String) : Flow<List<QuoteDatabase>>{
+        return QDatabase.quoteDao().getPrueba(search)
     }
 
     fun insert(quote : QuoteDatabase){
@@ -39,21 +43,11 @@ class Repository(private val QDatabase : QDatabase) {
         QDatabase.quoteDao().insertListOfQuotes(quotes)
     }
 
-    fun prueba(search : String) : Flow<List<QuoteDatabase>>{
-        var r = QDatabase.quoteDao().getPrueba(search)
-        return r
-    }
-
     fun clear(){
         QDatabase.clearAllTables()
     }
 
     suspend fun getRandomImages(query : String, quantity : Int) : List<Image>{
-        var r = ImageApi.IMAGE_SERVICE.getRandomPhoto(tokenImage,query, quantity)
-        return r
+        return ImageApi.IMAGE_SERVICE.getRandomPhoto(tokenImage,query, quantity)
     }
-
-    /*fun getQuotes() : Flow<List<Quote>>{
-        //QuoteDatabase.getDatabase().quoteDao().getCategories()
-    }*/
 }
