@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material.*
 import androidx.compose.ui.platform.setContent
 import androidx.lifecycle.Observer
-import com.represa.quoty.data.model.network.LoginStatus
+import com.represa.quoty.data.model.network.quote.LoginStatus
 import com.represa.quoty.ui.screen.Login
 import com.represa.quoty.ui.theme.QuotyTheme
 import com.represa.quoty.ui.viewmodel.LoginViewModel

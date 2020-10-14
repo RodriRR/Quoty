@@ -8,7 +8,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.represa.quoty.data.model.network.LoginStatus
+import com.represa.quoty.data.model.network.quote.LoginStatus
 import com.represa.quoty.ui.viewmodel.LoginViewModel
 
 @Composable

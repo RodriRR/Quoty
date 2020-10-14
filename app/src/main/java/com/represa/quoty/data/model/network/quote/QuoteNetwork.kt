@@ -1,4 +1,4 @@
-package com.represa.quoty.data.model.network
+package com.represa.quoty.data.model.network.quote
 
 data class QuoteNetwork(
     var id: Int,
