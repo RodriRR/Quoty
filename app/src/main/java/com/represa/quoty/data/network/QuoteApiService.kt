@@ -1,8 +1,8 @@
 package com.represa.quoty.data.network
 
-import com.represa.quoty.data.model.network.ResponseQuotes
-import com.represa.quoty.data.model.network.Token
-import com.represa.quoty.data.model.network.User
+import com.represa.quoty.data.model.network.quote.ResponseQuotes
+import com.represa.quoty.data.model.network.quote.Token
+import com.represa.quoty.data.model.network.quote.User
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import retrofit2.Retrofit
@@ -32,7 +32,7 @@ private val retrofit = Retrofit.Builder()
 /**
  * Access to API endpoints
  */
-interface ApiService {
+interface QuoteApiService {
 
     @Headers("Content-Type: application/json")
     @POST("session")
@@ -75,6 +75,6 @@ interface ApiService {
 /**
  * A public Api object that exposes the lazy-initialized Retrofit service
  */
-object FavQsApi {
-    val RETROFIT_SERVICE: ApiService by lazy { retrofit.create(ApiService::class.java) }
+object QuoteApi {
+    val QUOTE_SERVICE: QuoteApiService by lazy { retrofit.create(QuoteApiService::class.java) }
 }
