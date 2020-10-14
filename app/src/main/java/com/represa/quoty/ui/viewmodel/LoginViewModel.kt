@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.represa.quoty.data.Repository
-import com.represa.quoty.data.model.network.LoginStatus
+import com.represa.quoty.data.model.network.quote.LoginStatus
 import kotlinx.coroutines.launch
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
