@@ -5,49 +5,101 @@ import androidx.compose.animation.core.transitionDefinition
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.transition
 import androidx.compose.foundation.Text
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRowFor
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.WithConstraints
+import androidx.compose.ui.draw.drawOpacity
+import androidx.compose.ui.focus.FocusManager
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.ui.tooling.preview.Preview
+import com.represa.quoty.ui.components.QuoteCard
+import com.represa.quoty.ui.components.QuoteCardDummy
 import com.represa.quoty.ui.viewmodel.MainViewModel
 import com.represa.quoty.util.ui.AbsoluteAlignment
 
+
 @Preview
 @Composable
-fun newHome(){
+fun newHome() {
     Surface(Modifier.fillMaxSize()) {
         WithConstraints() {
-            Box(){
+            Box(Modifier.fillMaxSize()) {
 
-                var trigger by remember{ mutableStateOf<Boolean>(false) }
+                var searchMode by remember { mutableStateOf<Boolean>(false) }
+
+                var visibility by remember { mutableStateOf<Boolean>(false) }
 
                 val transition = transition(
                     definition = remember { searchTransition() },
                     initState = SearchComponentState.SearchDisabled,
-                    toState = if(trigger){ SearchComponentState.SearchEnabled }else{ SearchComponentState.SearchDisabled}
+                    toState = if (searchMode) {
+                        SearchComponentState.SearchEnabled
+                    } else {
+                        SearchComponentState.SearchDisabled
+                    },
+                    onStateChangeFinished = { state ->
+                        when(state){
+                            SearchComponentState.SearchEnabled -> visibility = true
+                        }
+                    }
+
                 )
 
                 val verticalBias = transition[searchComponentVerticalBias]
 
-                Text(
-                    modifier = Modifier.align(AbsoluteAlignment(verticalBias))
-                        .clickable(onClick = { trigger = !trigger }),
-                    text = "Find Your \nQuote",
-                    fontSize = 28.sp,
-                    lineHeight = 28.sp
-                )
+                Column(
+                    modifier = Modifier.align(AbsoluteAlignment(verticalBias)).background(Color.Red)
+                ) {
+                    Text(
+                        modifier = Modifier
+                            .clickable(onClick = { }),
+                        text = "Find Your \nQuote",
+                        fontSize = 28.sp,
+                        lineHeight = 28.sp
+                    )
+
+                    var textField by remember { mutableStateOf("") }
+
+                    Row {
+
+                        TextField(
+                            value = textField,
+                            onTextInputStarted = { searchMode = !searchMode },
+                            onValueChange = { textField = it },
+                            label = { Text(text = "search") },
+                            imeAction = ImeAction.Done,
+                            onImeActionPerformed = { action, softwareController ->
+                                if(action == ImeAction.Done){
+                                    softwareController!!.hideSoftwareKeyboard()
+
+                                }
+                            }
+                        )
+
+                        Button(onClick = { searchMode = false; textField = ""; visibility = false}) {
+                        }
+                    }
+                }
+                Box(modifier = Modifier.drawOpacity(
+                    1f//if(visibility){ 1f }else{ 0f }
+                ).wrapContentHeight().fillMaxWidth().background(Color.Black).align(Alignment.CenterStart)){
+                    LazyRowFor(items = mutableListOf(0..2), itemContent = { QuoteCardDummy() })
+                }
             }
         }
     }
 }
 
-enum class SearchComponentState{
+enum class SearchComponentState {
     SearchEnabled,
     SearchDisabled
 }
@@ -56,17 +108,23 @@ private val searchComponentVerticalBias = FloatPropKey()
 
 private fun searchTransition() = transitionDefinition<SearchComponentState> {
     //Properties when the search is Disabled
-    state(SearchComponentState.SearchDisabled){
+    state(SearchComponentState.SearchDisabled) {
         this[searchComponentVerticalBias] = 0f
     }
-    state(SearchComponentState.SearchEnabled){
+    state(SearchComponentState.SearchEnabled) {
         this[searchComponentVerticalBias] = -1f
     }
-    transition(fromState = SearchComponentState.SearchDisabled, toState = SearchComponentState.SearchEnabled){
-        searchComponentVerticalBias using tween(durationMillis = 1000, delayMillis = 500 )
+    transition(
+        fromState = SearchComponentState.SearchDisabled,
+        toState = SearchComponentState.SearchEnabled
+    ) {
+        searchComponentVerticalBias using tween(durationMillis = 500, delayMillis = 250)
     }
-    transition(fromState = SearchComponentState.SearchEnabled, toState = SearchComponentState.SearchDisabled){
-        searchComponentVerticalBias using tween(durationMillis = 1000, delayMillis = 500 )
+    transition(
+        fromState = SearchComponentState.SearchEnabled,
+        toState = SearchComponentState.SearchDisabled
+    ) {
+        searchComponentVerticalBias using tween(durationMillis = 500, delayMillis = 250)
     }
 }
 
@@ -114,13 +172,19 @@ fun Home(viewModel: MainViewModel) {
             Modifier.padding(16.dp, 0.dp, 16.dp, 16.dp).constrainAs(searchBar) {
                 top.linkTo(title.bottom)
             }*/
-        
+
 
         val paddingSearch = PaddingValues(16.dp, 16.dp, 0.dp, 16.dp)
         val paddingNoSearch = PaddingValues(16.dp, 200.dp, 0.dp, 16.dp)
 
         Text(
-            modifier = Modifier.padding(if (searchMode) { paddingSearch } else { paddingNoSearch } )
+            modifier = Modifier.padding(
+                if (searchMode) {
+                    paddingSearch
+                } else {
+                    paddingNoSearch
+                }
+            )
                 .clickable(onClick = { searchMode = !searchMode })
                 .constrainAs(title) {
                     top.linkTo(parent.top)
