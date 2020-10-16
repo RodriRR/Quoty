@@ -9,7 +9,9 @@ import androidx.compose.material.Surface
 import androidx.compose.material.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.frames.Frame
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.WithConstraints
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
@@ -24,7 +26,7 @@ import java.time.format.TextStyle
 
 
 @Composable
-fun MainCard(quote : QuoteDatabase){
+fun MainCard(quote: QuoteDatabase) {
     Card(Modifier.fillMaxWidth().preferredHeight(50.dp).background(Color.Red)) {
         Column() {
             Text(text = quote.body)
@@ -33,8 +35,11 @@ fun MainCard(quote : QuoteDatabase){
 }
 
 @Composable
-fun QuoteCardDummy(){
-    Card(elevation = 3.dp, modifier = Modifier.height(350.dp).width(230.dp).padding(5.dp,5.dp,10.dp,5.dp)) {
+fun QuoteCardDummy() {
+    Card(
+        elevation = 3.dp,
+        modifier = Modifier.height(350.dp).width(230.dp).padding(5.dp, 5.dp, 10.dp, 5.dp)
+    ) {
         ConstraintLayout(Modifier.fillMaxSize()) {
 
             var (image, filter, text) = createRefs()
@@ -44,51 +49,62 @@ fun QuoteCardDummy(){
                     top.linkTo(parent.top)
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
-                    bottom.linkTo(parent.bottom)})
+                    bottom.linkTo(parent.bottom)
+                })
 
-            Box( modifier = Modifier.fillMaxSize().background(color = Color(0x4D000000)).constrainAs(filter) {
-                top.linkTo(parent.top)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-                bottom.linkTo(parent.bottom)})
+            Box(
+                modifier = Modifier.fillMaxSize().background(color = Color(0x4D000000))
+                    .constrainAs(filter) {
+                        top.linkTo(parent.top)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                        bottom.linkTo(parent.bottom)
+                    })
 
-            Text( text = "prueba", color = Color.White ,textAlign = TextAlign.Center, modifier =  Modifier.padding(10.dp).constrainAs(text){
-                top.linkTo(parent.top)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-                bottom.linkTo(parent.bottom)
-            })
+            Text(
+                text = "prueba",
+                color = Color.White,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(10.dp).constrainAs(text) {
+                    top.linkTo(parent.top)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                    bottom.linkTo(parent.bottom)
+                })
         }
     }
 }
 
 
 @Composable
-fun QuoteCard(quote : QuoteDatabase){
-    Card(elevation = 3.dp, modifier = Modifier.height(350.dp).width(230.dp).padding(5.dp,5.dp,10.dp,5.dp)) {
-        ConstraintLayout(Modifier.fillMaxSize()) {
+fun QuoteCard(quote: QuoteDatabase) {
+    Surface() {
 
-            var (image, filter, text) = createRefs()
+        WithConstraints() {
 
-            CoilImage(data = quote.image,
-                contentScale = ContentScale.Crop, modifier = Modifier.constrainAs(image) {
-                top.linkTo(parent.top)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-                bottom.linkTo(parent.bottom)})
+            Card(
+                elevation = 3.dp,
+                modifier = Modifier.height(350.dp).width(230.dp).padding(5.dp, 5.dp, 10.dp, 5.dp)
+            ) {
 
-            Box( modifier = Modifier.fillMaxSize().background(color = Color(0x4D000000)).constrainAs(filter) {
-                top.linkTo(parent.top)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-                bottom.linkTo(parent.bottom)})
+                Box(modifier = Modifier.fillMaxSize()) {
 
-            Text( text = quote.body, color = Color.White ,textAlign = TextAlign.Center, modifier =  Modifier.padding(10.dp).constrainAs(text){
-                top.linkTo(parent.top)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-                bottom.linkTo(parent.bottom)
-            })
+                    CoilImage(
+                        data = quote.image,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier.fillMaxSize()
+                    )
+
+                    Box(modifier = Modifier.fillMaxSize().background(color = Color(0x4D000000)))
+
+                    Text(
+                        text = quote.body,
+                        color = Color.White,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(10.dp).align(Alignment.Center)
+                    )
+                }
+            }
         }
     }
 }
