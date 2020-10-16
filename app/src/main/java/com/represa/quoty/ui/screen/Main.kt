@@ -36,7 +36,7 @@ fun Main(viewModel: MainViewModel) {
         val modifier = Modifier.padding(innerPadding)
         Crossfade(currentSection) { section ->
             when (section) {
-                Home -> Home(viewModel)
+                Home -> newHome(viewModel)
                 //HomeSection.Fav -> Login()
             }
         }
