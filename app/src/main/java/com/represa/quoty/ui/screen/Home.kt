@@ -34,10 +34,22 @@ fun newHome() {
         WithConstraints() {
             Box(Modifier.fillMaxSize()) {
 
-                var searchMode by remember { mutableStateOf<Boolean>(false) }
-
+                //This var manage the visibility of the quote searched
                 var visibility by remember { mutableStateOf<Boolean>(false) }
 
+                //This Box will show the quotes searched
+                Box(modifier = Modifier.drawOpacity(
+                    if(visibility){ 1f }else{ 0f }
+                ).wrapContentHeight().fillMaxWidth().background(Color.Black).align(Alignment.CenterStart)){
+                    LazyRowFor(items = mutableListOf(0..2), itemContent = { QuoteCardDummy() })
+                }
+
+                //To make transitions possible, we need a var to determinete in which
+                //state we are, if searchmode = true -> searching
+                var searchMode by remember { mutableStateOf<Boolean>(false) }
+
+                //If we are in the state SearchDisable and then we click on the searchField
+                //We are going to transitate to the SearchEnable state
                 val transition = transition(
                     definition = remember { searchTransition() },
                     initState = SearchComponentState.SearchDisabled,
@@ -46,6 +58,7 @@ fun newHome() {
                     } else {
                         SearchComponentState.SearchDisabled
                     },
+                    //When finish transition show the quotes view
                     onStateChangeFinished = { state ->
                         when(state){
                             SearchComponentState.SearchEnabled -> visibility = true
@@ -85,15 +98,12 @@ fun newHome() {
                             }
                         )
 
+                        //Hidde quotes and transitate to SearchDisable
                         Button(onClick = { searchMode = false; textField = ""; visibility = false}) {
                         }
                     }
                 }
-                Box(modifier = Modifier.drawOpacity(
-                    1f//if(visibility){ 1f }else{ 0f }
-                ).wrapContentHeight().fillMaxWidth().background(Color.Black).align(Alignment.CenterStart)){
-                    LazyRowFor(items = mutableListOf(0..2), itemContent = { QuoteCardDummy() })
-                }
+
             }
         }
     }
