@@ -26,7 +26,7 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
     private val searchChanel = ConflatedBroadcastChannel<String>()
 
     val flow = searchChanel.asFlow().debounce(SEARCH_DELAY_MILLIS).flatMapLatest { search ->
-        getQuotes(search)
+        fetchQuotes(search)
         repository.searchQuotes(search)
     }.flowOn(Dispatchers.IO)
 
@@ -45,7 +45,7 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
         }
     }
 
-    private fun getQuotes(search: String) {
+    private fun fetchQuotes(search: String) {
         if (!search.isNullOrEmpty()) {
             viewModelScope.launch(Dispatchers.IO) {
                 try {

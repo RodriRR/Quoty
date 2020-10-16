@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.represa.quoty.data.model.database.QuoteDatabase
 import com.represa.quoty.ui.components.QuoteCard
 import com.represa.quoty.ui.viewmodel.MainViewModel
 import com.represa.quoty.util.ui.AbsoluteAlignment
@@ -32,9 +33,8 @@ fun newHome(viewModel: MainViewModel) {
 
             Box(Modifier.fillMaxSize()) {
 
-                //Quotes to being shown
+                //Quotes to be shown
                 var quotesSearched = viewModel.flow.collectAsState(initial = emptyList())
-
 
                 //To make transitions possible, we need a var to determinete in which
                 //state we are, if searchmode = true -> searching
@@ -43,7 +43,7 @@ fun newHome(viewModel: MainViewModel) {
                 val transitionQuotesAlpha = transition(
                     definition = remember { quotesTransition() },
                     initState = QuotesState.QuotesHidden,
-                    toState = if (searchMode) {
+                    toState = if (!quotesSearched.value.isNullOrEmpty()) {
                         QuotesState.QuotesShown
                     } else {
                         QuotesState.QuotesHidden
@@ -60,7 +60,7 @@ fun newHome(viewModel: MainViewModel) {
                         .fillMaxWidth().align(Alignment.CenterStart)
                 ) {
                     LazyRowFor(
-                        items = quotesSearched.value,
+                        items = quotesSearched,
                         itemContent = { QuoteCard(it) },
                     )
                 }
@@ -70,7 +70,7 @@ fun newHome(viewModel: MainViewModel) {
                 val transition = transition(
                     definition = remember { searchTransition() },
                     initState = SearchComponentState.SearchDisabled,
-                    toState = if (searchMode) {
+                    toState = if (!quotesSearched.value.isNullOrEmpty()) {
                         SearchComponentState.SearchEnabled
                     } else {
                         SearchComponentState.SearchDisabled
@@ -78,7 +78,7 @@ fun newHome(viewModel: MainViewModel) {
                     //When finish transition show the quotes view
                     onStateChangeFinished = { state ->
                         when (state) {
-                            SearchComponentState.SearchEnabled -> visibility = true
+                            //SearchComponentState.SearchEnabled -> visibility = true
                         }
                     }
 
@@ -103,21 +103,20 @@ fun newHome(viewModel: MainViewModel) {
 
                         TextField(
                             value = viewModel.search,
-                            onTextInputStarted = { searchMode = !searchMode },
+                            //onTextInputStarted = { searchMode = true },
                             onValueChange = { viewModel.setSearchQuery(it); viewModel.search = it },
                             label = { Text(text = "search") },
                             imeAction = ImeAction.Done,
                             onImeActionPerformed = { action, softwareController ->
                                 if (action == ImeAction.Done) {
                                     softwareController!!.hideSoftwareKeyboard()
-
                                 }
                             }
                         )
 
                         //Hidde quotes and transitate to SearchDisable
                         Button(onClick = {
-                            searchMode = false; textField = ""; visibility = false
+                            quotesSearched; textField = ""; visibility = false
                         }) {
                         }
                     }
@@ -147,7 +146,7 @@ private fun searchTransition() = transitionDefinition<SearchComponentState> {
         fromState = SearchComponentState.SearchDisabled,
         toState = SearchComponentState.SearchEnabled
     ) {
-        searchComponentVerticalBias using tween(durationMillis = 500, delayMillis = 250)
+        searchComponentVerticalBias using tween(durationMillis = 400, delayMillis = 250)
     }
     transition(
         fromState = SearchComponentState.SearchEnabled,
@@ -182,7 +181,8 @@ private fun quotesTransition() = transitionDefinition<QuotesState> {
         fromState = QuotesState.QuotesShown,
         toState = QuotesState.QuotesHidden
     ) {
-        quotesAlpha using tween(durationMillis = 500, delayMillis = 100)
+        //This is not used because lazycolum erase the hole row
+        quotesAlpha using tween(durationMillis = 0, delayMillis = 0)
     }
 }
 
