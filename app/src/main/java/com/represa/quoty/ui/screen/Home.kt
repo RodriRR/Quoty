@@ -15,41 +15,58 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.WithConstraints
 import androidx.compose.ui.draw.drawOpacity
-import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.ui.tooling.preview.Preview
 import com.represa.quoty.ui.components.QuoteCard
-import com.represa.quoty.ui.components.QuoteCardDummy
 import com.represa.quoty.ui.viewmodel.MainViewModel
 import com.represa.quoty.util.ui.AbsoluteAlignment
 
 
-@Preview
 @Composable
-fun newHome() {
+fun newHome(viewModel: MainViewModel) {
     Surface(Modifier.fillMaxSize()) {
+
         WithConstraints() {
+
             Box(Modifier.fillMaxSize()) {
 
-                //This var manage the visibility of the quote searched
-                var visibility by remember { mutableStateOf<Boolean>(false) }
+                //Quotes to being shown
+                var quotesSearched = viewModel.flow.collectAsState(initial = emptyList())
 
-                //This Box will show the quotes searched
-                Box(modifier = Modifier.drawOpacity(
-                    if(visibility){ 1f }else{ 0f }
-                ).wrapContentHeight().fillMaxWidth().background(Color.Black).align(Alignment.CenterStart)){
-                    LazyRowFor(items = mutableListOf(0..2), itemContent = { QuoteCardDummy() })
-                }
 
                 //To make transitions possible, we need a var to determinete in which
                 //state we are, if searchmode = true -> searching
                 var searchMode by remember { mutableStateOf<Boolean>(false) }
 
+                val transitionQuotesAlpha = transition(
+                    definition = remember { quotesTransition() },
+                    initState = QuotesState.QuotesHidden,
+                    toState = if (searchMode) {
+                        QuotesState.QuotesShown
+                    } else {
+                        QuotesState.QuotesHidden
+                    },
+                )
+
+                val quotesAlpha = transitionQuotesAlpha[quotesAlpha]
+
+                //This var manage the visibility of the quote searched
+                var visibility by remember { mutableStateOf(false) }
+
+                //This Box will show the quotes searched
+                Box(modifier = Modifier.drawOpacity(quotesAlpha).wrapContentHeight()
+                        .fillMaxWidth().align(Alignment.CenterStart)
+                ) {
+                    LazyRowFor(
+                        items = quotesSearched.value,
+                        itemContent = { QuoteCard(it) },
+                    )
+                }
+
                 //If we are in the state SearchDisable and then we click on the searchField
-                //We are going to transitate to the SearchEnable state
+                //We are going to transit to the SearchEnable state
                 val transition = transition(
                     definition = remember { searchTransition() },
                     initState = SearchComponentState.SearchDisabled,
@@ -60,7 +77,7 @@ fun newHome() {
                     },
                     //When finish transition show the quotes view
                     onStateChangeFinished = { state ->
-                        when(state){
+                        when (state) {
                             SearchComponentState.SearchEnabled -> visibility = true
                         }
                     }
@@ -85,13 +102,13 @@ fun newHome() {
                     Row {
 
                         TextField(
-                            value = textField,
+                            value = viewModel.search,
                             onTextInputStarted = { searchMode = !searchMode },
-                            onValueChange = { textField = it },
+                            onValueChange = { viewModel.setSearchQuery(it); viewModel.search = it },
                             label = { Text(text = "search") },
                             imeAction = ImeAction.Done,
                             onImeActionPerformed = { action, softwareController ->
-                                if(action == ImeAction.Done){
+                                if (action == ImeAction.Done) {
                                     softwareController!!.hideSoftwareKeyboard()
 
                                 }
@@ -99,7 +116,9 @@ fun newHome() {
                         )
 
                         //Hidde quotes and transitate to SearchDisable
-                        Button(onClick = { searchMode = false; textField = ""; visibility = false}) {
+                        Button(onClick = {
+                            searchMode = false; textField = ""; visibility = false
+                        }) {
                         }
                     }
                 }
@@ -138,112 +157,36 @@ private fun searchTransition() = transitionDefinition<SearchComponentState> {
     }
 }
 
+enum class QuotesState {
+    QuotesShown,
+    QuotesHidden
+}
 
-@Composable
-fun Home(viewModel: MainViewModel) {
+private val quotesAlpha = FloatPropKey()
 
-    var prueba = viewModel.flow.collectAsState(initial = emptyList())
-
-    //Scaffold(
-    //topBar = { TopBar(search, viewModel) }) {
-
-    /*LazyColumnFor(
-        items = prueba.value,
-        itemContent = { MainCard(it) }
-    )
-}*/
-    //}
-    ConstraintLayout(
-        Modifier.padding(0.dp, 16.dp, 0.dp, 0.dp).fillMaxSize()
+private fun quotesTransition() = transitionDefinition<QuotesState> {
+    //Properties when the search is Disabled
+    state(QuotesState.QuotesHidden) {
+        this[quotesAlpha] = 0f
+    }
+    state(QuotesState.QuotesShown) {
+        this[quotesAlpha] = 1f
+    }
+    transition(
+        fromState = QuotesState.QuotesHidden,
+        toState = QuotesState.QuotesShown
     ) {
-
-        var searchMode by remember { mutableStateOf(false) }
-
-        // Create references for the composables to constrain
-        val (title, subtitle, searchBar, lazyColumn) = createRefs()
-
-        /*val modifierSearch = Modifier.padding(16.dp, 16.dp, 0.dp, 16.dp)
-            .clickable(onClick = { searchMode = false })
-            .constrainAs(title) {
-                top.linkTo(parent.top)
-                absoluteLeft.linkTo(parent.absoluteLeft)
-            }.background(Color.Red)
-
-        val modifierNoSearch = Modifier.padding(16.dp, 16.dp, 0.dp, 16.dp)
-            .clickable(onClick = { searchMode = true })
-            .constrainAs(title) {
-                top.linkTo(parent.top)
-                absoluteLeft.linkTo(parent.absoluteLeft)
-                bottom.linkTo(parent.bottom)
-                absoluteRight.linkTo(parent.absoluteRight)
-            }.background(Color.Cyan)*/
-
-        /*val searchBarConstrains =
-            Modifier.padding(16.dp, 0.dp, 16.dp, 16.dp).constrainAs(searchBar) {
-                top.linkTo(title.bottom)
-            }*/
-
-
-        val paddingSearch = PaddingValues(16.dp, 16.dp, 0.dp, 16.dp)
-        val paddingNoSearch = PaddingValues(16.dp, 200.dp, 0.dp, 16.dp)
-
-        Text(
-            modifier = Modifier.padding(
-                if (searchMode) {
-                    paddingSearch
-                } else {
-                    paddingNoSearch
-                }
-            )
-                .clickable(onClick = { searchMode = !searchMode })
-                .constrainAs(title) {
-                    top.linkTo(parent.top)
-                    absoluteLeft.linkTo(parent.absoluteLeft)
-                },
-            text = "Find Your \nQuote",
-            fontSize = 28.sp,
-            lineHeight = 28.sp
-        )
-
-        /*TopBar(
-            viewModel = viewModel,
-            modifier = searchBarConstrains,
-            onValueChange = { searchMode = true })
-
-        Text(
-            modifier = Modifier.padding(16.dp, 0.dp, 0.dp, 16.dp).constrainAs(subtitle) {
-                top.linkTo(searchBar.bottom)
-            },
-            text = "Results",
-            fontSize = 20.sp
-        )
-
-        LazyRowFor(
-            items = prueba.value,
-            itemContent = { QuoteCard(it) },
-            modifier = Modifier.padding(5.dp, 0.dp, 5.dp, 0.dp).constrainAs(lazyColumn) {
-                top.linkTo(subtitle.bottom)
-                bottom.linkTo(parent.bottom)
-                absoluteLeft.linkTo(parent.absoluteLeft)
-                absoluteRight.linkTo(parent.absoluteRight)
-            }
-        )*/
+        quotesAlpha using tween(durationMillis = 500, delayMillis = 250)
     }
-
-}
-
-
-@Composable
-fun TopBar(viewModel: MainViewModel, modifier: Modifier, onValueChange: () -> Unit) {
-    Column(modifier = modifier) {
-        TextField(
-            value = viewModel.search,
-            onValueChange = { it ->
-                viewModel.setSearchQuery(it); viewModel.search = it; onValueChange
-            },
-            label = { Text(text = "search") })
+    transition(
+        fromState = QuotesState.QuotesShown,
+        toState = QuotesState.QuotesHidden
+    ) {
+        quotesAlpha using tween(durationMillis = 500, delayMillis = 100)
     }
 }
+
+
 
 @Composable
 private fun Toolbar() {
