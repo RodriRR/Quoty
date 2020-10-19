@@ -60,7 +60,7 @@ fun newHome(viewModel: MainViewModel) {
                         .fillMaxWidth().align(Alignment.CenterStart)
                 ) {
                     LazyRowFor(
-                        items = quotesSearched,
+                        items = quotesSearched.value,
                         itemContent = { QuoteCard(it) },
                     )
                 }
