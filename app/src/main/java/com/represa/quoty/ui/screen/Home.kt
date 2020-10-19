@@ -1,5 +1,6 @@
 package com.represa.quoty.ui.screen
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.FloatPropKey
 import androidx.compose.animation.core.transitionDefinition
 import androidx.compose.animation.core.tween
@@ -87,7 +88,7 @@ fun newHome(viewModel: MainViewModel) {
                 val verticalBias = transition[searchComponentVerticalBias]
 
                 Column(
-                    modifier = Modifier.align(AbsoluteAlignment(verticalBias)).background(Color.Red)
+                    modifier = Modifier.align(AbsoluteAlignment(verticalBias))
                 ) {
                     Text(
                         modifier = Modifier
@@ -116,8 +117,9 @@ fun newHome(viewModel: MainViewModel) {
 
                         //Hidde quotes and transitate to SearchDisable
                         Button(onClick = {
-                            quotesSearched; textField = ""; visibility = false
+                            viewModel.clearQuotesFlow(); textField = "clear"; visibility = false
                         }) {
+                            Text(text = "clear")
                         }
                     }
                 }
