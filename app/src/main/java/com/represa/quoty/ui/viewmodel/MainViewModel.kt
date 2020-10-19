@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 
 class MainViewModel(private val repository: Repository) : ViewModel() {
 
-    private val SEARCH_DELAY_MILLIS = 1000L
+    private val SEARCH_DELAY_MILLIS = 650L
 
     var search by mutableStateOf("")
 
@@ -39,12 +39,6 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
         searchChanel.offer(search)
     }
 
-    private fun clearDatabase() {
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.clear()
-        }
-    }
-
     private fun fetchQuotes(search: String) {
         if (!search.isNullOrEmpty()) {
             viewModelScope.launch(Dispatchers.IO) {
@@ -65,6 +59,17 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
 
     private suspend fun getRandomImages(quantity: Int): List<Image> {
         return repository.getRandomImages(search, quantity)
+    }
+
+    private fun clearDatabase() {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.clear()
+        }
+    }
+
+    fun clearQuotesFlow() {
+        search = ""
+        searchChanel.offer(search)
     }
 }
 
