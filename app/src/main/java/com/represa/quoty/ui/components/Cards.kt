@@ -24,58 +24,6 @@ import dev.chrisbanes.accompanist.coil.CoilImage
 //import dev.chrisbanes.accompanist.coil.CoilImage
 import java.time.format.TextStyle
 
-
-@Composable
-fun MainCard(quote: QuoteDatabase) {
-    Card(Modifier.fillMaxWidth().preferredHeight(50.dp).background(Color.Red)) {
-        Column() {
-            Text(text = quote.body)
-        }
-    }
-}
-
-@Composable
-fun QuoteCardDummy() {
-    Card(
-        elevation = 3.dp,
-        modifier = Modifier.height(350.dp).width(230.dp).padding(5.dp, 5.dp, 10.dp, 5.dp)
-    ) {
-        ConstraintLayout(Modifier.fillMaxSize()) {
-
-            var (image, filter, text) = createRefs()
-
-            CoilImage(data = "",
-                contentScale = ContentScale.Crop, modifier = Modifier.constrainAs(image) {
-                    top.linkTo(parent.top)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                    bottom.linkTo(parent.bottom)
-                })
-
-            Box(
-                modifier = Modifier.fillMaxSize().background(color = Color(0x4D000000))
-                    .constrainAs(filter) {
-                        top.linkTo(parent.top)
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end)
-                        bottom.linkTo(parent.bottom)
-                    })
-
-            Text(
-                text = "prueba",
-                color = Color.White,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.padding(10.dp).constrainAs(text) {
-                    top.linkTo(parent.top)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                    bottom.linkTo(parent.bottom)
-                })
-        }
-    }
-}
-
-
 @Composable
 fun QuoteCard(quote: QuoteDatabase) {
     Surface() {
@@ -84,7 +32,7 @@ fun QuoteCard(quote: QuoteDatabase) {
 
             Card(
                 elevation = 3.dp,
-                modifier = Modifier.height(350.dp).width(230.dp).padding(5.dp, 5.dp, 10.dp, 5.dp)
+                modifier = Modifier.height(350.dp).width(230.dp).padding(5.dp, 5.dp, 10.dp, 5.dp),
             ) {
 
                 Box(modifier = Modifier.fillMaxSize()) {
