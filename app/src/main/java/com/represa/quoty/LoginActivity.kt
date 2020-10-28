@@ -11,7 +11,8 @@ import com.represa.quoty.data.model.network.quote.LoginStatus
 import com.represa.quoty.ui.screen.Login
 import com.represa.quoty.ui.theme.QuotyTheme
 import com.represa.quoty.ui.viewmodel.LoginViewModel
-import org.koin.android.viewmodel.ext.android.viewModel
+import com.represa.quoty.util.navigation.bottomnav.MultiBottomNavApp
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class LoginActivity : AppCompatActivity() {
@@ -25,7 +26,7 @@ class LoginActivity : AppCompatActivity() {
 
         startObservers()
 
-        setContent {
+        /*setContent {
             QuotyTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
@@ -35,6 +36,10 @@ class LoginActivity : AppCompatActivity() {
                     }
                 }
             }
+        }*/
+
+        setContent {
+            MultiBottomNavApp()
         }
     }
 

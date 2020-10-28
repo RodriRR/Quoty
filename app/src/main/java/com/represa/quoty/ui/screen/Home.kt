@@ -26,7 +26,7 @@ import org.koin.androidx.compose.getViewModel
 
 
 @Composable
-fun newHome(viewModel: MainViewModel = getViewModel()) {
+fun SearchView(viewModel: MainViewModel = getViewModel()) {
     Surface(Modifier.fillMaxSize()) {
 
         WithConstraints() {
