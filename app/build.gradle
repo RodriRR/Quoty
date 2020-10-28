@@ -101,14 +101,21 @@ dependencies {
     implementation "dev.chrisbanes.accompanist:accompanist-coil:0.3.0"
 
     //Koin
-    // Koin for Android
-    implementation "org.koin:koin-android:$koin_version"
-    // or Koin for Lifecycle scoping
-    implementation "org.koin:koin-android-scope:$koin_version"
-    // or Koin for Android Architecture ViewModel
-    implementation "org.koin:koin-android-viewmodel:$koin_version"
+    // Koin AndroidX Scope feature
+    implementation "org.koin:koin-androidx-scope:$koin_version"
+    // Koin AndroidX ViewModel feature
+    implementation "org.koin:koin-androidx-viewmodel:$koin_version"
+    // Koin AndroidX Fragment Factory
+    implementation "org.koin:koin-androidx-fragment:$koin_version"
+    // Koin AndroidX Work Manager (unstable version)
+    implementation "org.koin:koin-androidx-workmanager:$koin_version"
+    // Koin AndroidX Compose (unstable version)
+    implementation "org.koin:koin-androidx-compose:$koin_version"
 
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+
+    //Compose navigation
+    implementation "androidx.navigation:navigation-compose:1.0.0-SNAPSHOT"
 }

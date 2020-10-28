@@ -20,14 +20,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.represa.quoty.data.model.database.QuoteDatabase
 import com.represa.quoty.ui.components.QuoteCard
 import com.represa.quoty.ui.viewmodel.MainViewModel
 import com.represa.quoty.util.ui.AbsoluteAlignment
+import org.koin.androidx.compose.getViewModel
 
 
 @Composable
-fun newHome(viewModel: MainViewModel) {
+fun newHome( viewModel: MainViewModel = getViewModel()) {
     Surface(Modifier.fillMaxSize()) {
 
         WithConstraints() {
@@ -94,15 +94,16 @@ fun newHome(viewModel: MainViewModel) {
                         modifier = Modifier
                             .clickable(onClick = { }),
                         text = "Find Your \nQuote",
-                        fontSize = 28.sp,
-                        lineHeight = 28.sp
+                        fontSize = 33.sp,
+                        lineHeight = 33.sp
                     )
 
                     var textField by remember { mutableStateOf("") }
 
-                    Row {
+                    Row(Modifier.padding(0.dp,10.dp,0.dp,0.dp)) {
 
                         TextField(
+                            modifier = Modifier.background(Color.Red),
                             value = viewModel.search,
                             //onTextInputStarted = { searchMode = true },
                             onValueChange = { viewModel.setSearchQuery(it); viewModel.search = it },
@@ -139,7 +140,7 @@ private val searchComponentVerticalBias = FloatPropKey()
 private fun searchTransition() = transitionDefinition<SearchComponentState> {
     //Properties when the search is Disabled
     state(SearchComponentState.SearchDisabled) {
-        this[searchComponentVerticalBias] = 0f
+        this[searchComponentVerticalBias] = -0.3f
     }
     state(SearchComponentState.SearchEnabled) {
         this[searchComponentVerticalBias] = -1f
