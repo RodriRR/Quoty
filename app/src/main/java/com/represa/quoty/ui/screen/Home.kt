@@ -1,6 +1,5 @@
 package com.represa.quoty.ui.screen
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.FloatPropKey
 import androidx.compose.animation.core.transitionDefinition
 import androidx.compose.animation.core.tween
@@ -27,7 +26,7 @@ import org.koin.androidx.compose.getViewModel
 
 
 @Composable
-fun newHome( viewModel: MainViewModel = getViewModel()) {
+fun newHome(viewModel: MainViewModel = getViewModel()) {
     Surface(Modifier.fillMaxSize()) {
 
         WithConstraints() {
@@ -57,7 +56,8 @@ fun newHome( viewModel: MainViewModel = getViewModel()) {
                 var visibility by remember { mutableStateOf(false) }
 
                 //This Box will show the quotes searched
-                Box(modifier = Modifier.drawOpacity(quotesAlpha).wrapContentHeight()
+                Box(
+                    modifier = Modifier.drawOpacity(quotesAlpha).wrapContentHeight()
                         .fillMaxWidth().align(Alignment.CenterStart)
                 ) {
                     LazyRowFor(
@@ -68,7 +68,7 @@ fun newHome( viewModel: MainViewModel = getViewModel()) {
 
                 //If we are in the state SearchDisable and then we click on the searchField
                 //We are going to transit to the SearchEnable state
-                val transition = transition(
+                val transitionSearchColumn = transition(
                     definition = remember { searchTransition() },
                     initState = SearchComponentState.SearchDisabled,
                     toState = if (!quotesSearched.value.isNullOrEmpty()) {
@@ -82,16 +82,28 @@ fun newHome( viewModel: MainViewModel = getViewModel()) {
                             //SearchComponentState.SearchEnabled -> visibility = true
                         }
                     }
-
                 )
 
-                val verticalBias = transition[searchComponentVerticalBias]
+                //If we are in the state SearchDisable and then we click on the searchField
+                //We are going to transit to the SearchEnable state
+                val transitionTitle = transition(
+                    definition = remember { titleTransition() },
+                    initState = TitleState.QuotesHidden,
+                    toState = if (!quotesSearched.value.isNullOrEmpty()) {
+                        TitleState.QuotesShown
+                    } else {
+                        TitleState.QuotesHidden
+                    }
+                )
+
+                val verticalBias = transitionSearchColumn[searchComponentVerticalBias]
+                val titleAlpha = transitionTitle[titleAlpha]
 
                 Column(
                     modifier = Modifier.align(AbsoluteAlignment(verticalBias))
                 ) {
                     Text(
-                        modifier = Modifier
+                        modifier = Modifier.height((titleAlpha*100).dp).drawOpacity(titleAlpha)
                             .clickable(onClick = { }),
                         text = "Find Your \nQuote",
                         fontSize = 33.sp,
@@ -100,7 +112,7 @@ fun newHome( viewModel: MainViewModel = getViewModel()) {
 
                     var textField by remember { mutableStateOf("") }
 
-                    Row(Modifier.padding(0.dp,10.dp,0.dp,0.dp)) {
+                    Row(Modifier.padding(0.dp, 10.dp, 0.dp, 0.dp)) {
 
                         TextField(
                             modifier = Modifier.background(Color.Red),
@@ -190,33 +202,32 @@ private fun quotesTransition() = transitionDefinition<QuotesState> {
 }
 
 
+enum class TitleState {
+    QuotesShown,
+    QuotesHidden
+}
 
-@Composable
-private fun Toolbar() {
-    TopAppBar(
-        modifier = Modifier.fillMaxWidth(),
-        backgroundColor = MaterialTheme.colors.background
+private val titleAlpha = FloatPropKey()
+
+private fun titleTransition() = transitionDefinition<TitleState> {
+    //Properties when the search is Disabled
+    state(TitleState.QuotesHidden) {
+        this[titleAlpha] = 1f
+    }
+    state(TitleState.QuotesShown) {
+        this[titleAlpha] = 0f
+    }
+    transition(
+        fromState = TitleState.QuotesHidden,
+        toState = TitleState.QuotesShown
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth()
-                .padding(horizontal = 10.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            /*Icon(
-                    imageResource(id = R.drawable.ic_baseline_4k_24),
-                    modifier = Modifier.preferredSize(24.dp)
-            )
-            Box(
-                    modifier = Modifier.padding(12.dp),
-                    gravity = ContentGravity.Center
-            ) {
-                Icon(vectorResource(id = R.drawable.ic_baseline_4k_24))
-            }
-            Icon(
-                    imageResource(id = R.drawable.ic_baseline_4k_24),
-                    modifier = Modifier.preferredSize(24.dp)
-            )*/
-        }
+        titleAlpha using tween(durationMillis = 500, delayMillis = 250)
+    }
+    transition(
+        fromState = TitleState.QuotesShown,
+        toState = TitleState.QuotesHidden
+    ) {
+        //This is not used because lazycolum erase the hole row
+        titleAlpha using tween(durationMillis = 500, delayMillis = 250)
     }
 }
