@@ -9,12 +9,11 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.savedinstancestate.Saver
 import androidx.compose.runtime.savedinstancestate.rememberSavedInstanceState
+import com.represa.quoty.ui.screen.NewQuote
 import com.represa.quoty.ui.screen.SearchView
 import com.represa.quoty.ui.theme.QuotyTheme
 import com.represa.quoty.util.navigation.*
-import com.represa.quoty.util.navigation.views.DashboardTab
 import com.represa.quoty.util.navigation.views.NavPhrasesTab
-import com.represa.quoty.util.navigation.views.ProfileTab
 
 @Composable
 fun MultiBottomNavApp() {
@@ -29,7 +28,7 @@ fun MultiNavTabContent(screen: Screen) {
     val phrasesNavState = rememberSavedInstanceState(saver = NavStateSaver()) { mutableStateOf(Bundle()) }
     when (screen) {
         Screen.Search    -> SearchView()
-        Screen.NewQuote  -> DashboardTab(dashboardNavState)
+        Screen.NewQuote  -> NewQuote()
         Screen.Profile   -> NavPhrasesTab(phrasesNavState)
         else             -> SearchView()
     }

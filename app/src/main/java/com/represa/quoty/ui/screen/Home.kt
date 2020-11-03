@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.sp
 import com.represa.quoty.ui.components.QuoteCard
 import com.represa.quoty.ui.viewmodel.MainViewModel
 import com.represa.quoty.util.ui.AbsoluteAlignment
+import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.getViewModel
 
 
@@ -129,12 +130,15 @@ fun SearchView(viewModel: MainViewModel = getViewModel()) {
                         )
 
                         //Hidde quotes and transitate to SearchDisable
-                        Button(onClick = {
+                        Button(modifier = Modifier.drawOpacity(quotesAlpha),
+                            onClick = {
                             viewModel.clearQuotesFlow(); textField = "clear"; visibility = false
                         }) {
                             Text(text = "clear")
                         }
                     }
+
+                    Text(text = "Results", modifier = Modifier.padding(0.dp,10.dp,0.dp,0.dp).height((quotesAlpha*20).dp))
                 }
 
             }
@@ -161,13 +165,13 @@ private fun searchTransition() = transitionDefinition<SearchComponentState> {
         fromState = SearchComponentState.SearchDisabled,
         toState = SearchComponentState.SearchEnabled
     ) {
-        searchComponentVerticalBias using tween(durationMillis = 400, delayMillis = 250)
+        searchComponentVerticalBias using tween(durationMillis = 400, delayMillis = 100)
     }
     transition(
         fromState = SearchComponentState.SearchEnabled,
         toState = SearchComponentState.SearchDisabled
     ) {
-        searchComponentVerticalBias using tween(durationMillis = 500, delayMillis = 250)
+        searchComponentVerticalBias using tween(durationMillis = 400, delayMillis = 100)
     }
 }
 
@@ -197,7 +201,7 @@ private fun quotesTransition() = transitionDefinition<QuotesState> {
         toState = QuotesState.QuotesHidden
     ) {
         //This is not used because lazycolum erase the hole row
-        quotesAlpha using tween(durationMillis = 0, delayMillis = 0)
+        quotesAlpha using tween(durationMillis = 500, delayMillis = 250)
     }
 }
 

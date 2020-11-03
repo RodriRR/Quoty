@@ -1,18 +1,11 @@
 package com.represa.quoty.ui.screen
 
 import androidx.compose.animation.Crossfade
-import androidx.compose.foundation.Icon
-import androidx.compose.foundation.Text
-import androidx.compose.foundation.contentColor
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.preferredSize
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.savedinstancestate.savedInstanceState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.unit.dp
 import com.represa.quoty.R
 import com.represa.quoty.ui.screen.HomeSection.Home
 import com.represa.quoty.ui.viewmodel.MainViewModel
@@ -36,7 +29,7 @@ fun Main(viewModel: MainViewModel) {
         val modifier = Modifier.padding(innerPadding)
         Crossfade(currentSection) { section ->
             when (section) {
-                Home -> newHome(viewModel)
+                Home -> SearchView(viewModel)
                 //HomeSection.Fav -> Login()
             }
         }
