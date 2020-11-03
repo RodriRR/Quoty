@@ -28,6 +28,10 @@ import java.time.format.TextStyle
 fun QuoteCard(quote: QuoteDatabase) {
     Surface() {
 
+        if (quote.body.length > 100){
+            quote.body = quote.body.substring(0, 100) + "..."
+        }
+
         WithConstraints() {
 
             Card(
@@ -51,6 +55,10 @@ fun QuoteCard(quote: QuoteDatabase) {
                         textAlign = TextAlign.Center,
                         modifier = Modifier.padding(10.dp).align(Alignment.Center)
                     )
+
+                    Text(text = "- " + quote.author + " -",
+                        modifier = Modifier.align(Alignment.BottomCenter).padding(0.dp,0.dp,0.dp,10.dp),
+                        color = Color.White)
                 }
             }
         }
