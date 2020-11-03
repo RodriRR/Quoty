@@ -1,11 +1,15 @@
 package com.represa.quoty.ui.theme
 
+import androidx.compose.foundation.shape.CutCornerShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Shapes
 import androidx.compose.material.Typography
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.font.font
 import androidx.compose.ui.text.font.fontFamily
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.represa.quoty.R
 
@@ -31,99 +35,65 @@ val typography = Typography(
 )
 
 private val Montserrat = fontFamily(
-        font(R.font.montserrat_light, FontWeight.Light),
-        font(R.font.montserrat_regular, FontWeight.Normal),
-        font(R.font.montserrat_medium, FontWeight.Medium),
-        font(R.font.montserrat_semi_bold, FontWeight.SemiBold)
+        font(R.font.montserrat_regular),
+        font(R.font.montserrat_medium, FontWeight.W500),
+        font(R.font.montserrat_semi_bold, FontWeight.W600)
 )
 
-
-val AppTypography = Typography(
-        h1 = TextStyle(
-                fontFamily = Montserrat,
-                fontSize = 96.sp,
-                fontWeight = FontWeight.Light,
-                lineHeight = 117.sp,
-                letterSpacing = (-1.5).sp
-        ),
-        h2 = TextStyle(
-                fontFamily = Montserrat,
-                fontSize = 60.sp,
-                fontWeight = FontWeight.Light,
-                lineHeight = 73.sp,
-                letterSpacing = (-0.5).sp
-        ),
-        h3 = TextStyle(
-                fontFamily = Montserrat,
-                fontSize = 48.sp,
-                fontWeight = FontWeight.Normal,
-                lineHeight = 59.sp
-        ),
+val QuotyTypography = Typography(
         h4 = TextStyle(
                 fontFamily = Montserrat,
-                fontSize = 30.sp,
-                fontWeight = FontWeight.SemiBold,
-                lineHeight = 37.sp
+                fontWeight = FontWeight.W600,
+                fontSize = 30.sp
         ),
         h5 = TextStyle(
                 fontFamily = Montserrat,
-                fontSize = 24.sp,
-                fontWeight = FontWeight.SemiBold,
-                lineHeight = 29.sp
+                fontWeight = FontWeight.W600,
+                fontSize = 24.sp
         ),
         h6 = TextStyle(
                 fontFamily = Montserrat,
-                fontSize = 20.sp,
-                fontWeight = FontWeight.SemiBold,
-                lineHeight = 24.sp
+                fontWeight = FontWeight.W600,
+                fontSize = 20.sp
         ),
         subtitle1 = TextStyle(
                 fontFamily = Montserrat,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.SemiBold,
-                lineHeight = 20.sp,
-                letterSpacing = 0.5.sp
+                fontWeight = FontWeight.W600,
+                fontSize = 16.sp
         ),
         subtitle2 = TextStyle(
                 fontFamily = Montserrat,
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Medium,
-                lineHeight = 17.sp,
-                letterSpacing = 0.1.sp
+                fontWeight = FontWeight.W500,
+                fontSize = 14.sp
         ),
         body1 = TextStyle(
                 fontFamily = Montserrat,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Medium,
-                lineHeight = 20.sp,
-                letterSpacing = 0.15.sp
+                fontWeight = FontWeight.Normal,
+                fontSize = 16.sp
         ),
         body2 = TextStyle(
                 fontFamily = Montserrat,
-                fontSize = 14.sp,
-                fontWeight = FontWeight.SemiBold,
-                lineHeight = 20.sp,
-                letterSpacing = 0.25.sp
+                fontSize = 14.sp
         ),
         button = TextStyle(
                 fontFamily = Montserrat,
-                fontSize = 14.sp,
-                fontWeight = FontWeight.SemiBold,
-                lineHeight = 16.sp,
-                letterSpacing = 1.25.sp
+                fontWeight = FontWeight.W500,
+                fontSize = 14.sp
         ),
         caption = TextStyle(
                 fontFamily = Montserrat,
-                fontSize = 12.sp,
-                fontWeight = FontWeight.SemiBold,
-                lineHeight = 16.sp,
-                letterSpacing = 0.sp
+                fontWeight = FontWeight.Normal,
+                fontSize = 12.sp
         ),
         overline = TextStyle(
                 fontFamily = Montserrat,
-                fontSize = 12.sp,
-                fontWeight = FontWeight.SemiBold,
-                lineHeight = 16.sp,
-                letterSpacing = 1.sp
+                fontWeight = FontWeight.W500,
+                fontSize = 12.sp
         )
 )
+/*
+val QuotyShapes = Shapes(
+        small = CutCornerShape(topLeft = 0.dp),
+        medium = CutCornerShape(topLeft = 0.dp),
+        large = RoundedCornerShape(0.dp)
+)*/
