@@ -12,7 +12,6 @@ object QuoteConverter{
             quoteNetwork.dialogue,
             quoteNetwork.tags.toString(),
             quoteNetwork.url,
-            quoteNetwork.author_permalink,
             quoteNetwork.favorites_count,
             quoteNetwork.upvotes_count,
             quoteNetwork.downvotes_count,
