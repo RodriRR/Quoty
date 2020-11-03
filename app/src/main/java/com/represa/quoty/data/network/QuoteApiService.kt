@@ -1,8 +1,6 @@
 package com.represa.quoty.data.network
 
-import com.represa.quoty.data.model.network.quote.ResponseQuotes
-import com.represa.quoty.data.model.network.quote.Token
-import com.represa.quoty.data.model.network.quote.User
+import com.represa.quoty.data.model.network.quote.*
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import retrofit2.Retrofit
@@ -41,6 +39,10 @@ interface QuoteApiService {
     @Headers("Content-Type: application/json")
     @GET("quotes")
     suspend fun getQuotes(@Header("Authorization") authHeader: String, @Query("filter") filter: String): ResponseQuotes
+
+    @Headers("Content-Type: application/json")
+    @POST("quotes")
+    suspend fun createQuote(@Header("Authorization") authHeader: String, @Header("User-Token") sessionToken: String, @Body body: NewQuote): QuoteNetwork
 
     /*@Headers("Content-Type: application/json")
     @POST("users")
