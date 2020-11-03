@@ -14,7 +14,6 @@ data class QuoteDatabase(
     var hidde: Boolean,
     var tags: String,
     var url: String,
-    var author_permalink: String,
     var favorites_count: Int,
     var upvotes_count: Int,
     var downvotes_count: Int,

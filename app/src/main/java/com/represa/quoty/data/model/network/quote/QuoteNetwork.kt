@@ -6,7 +6,6 @@ data class QuoteNetwork(
     var private: Boolean,
     var tags: List<String>,
     var url: String,
-    var author_permalink: String,
     var favorites_count: Int,
     var upvotes_count: Int,
     var downvotes_count: Int,
