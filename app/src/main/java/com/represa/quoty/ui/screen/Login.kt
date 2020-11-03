@@ -10,9 +10,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.represa.quoty.data.model.network.quote.LoginStatus
 import com.represa.quoty.ui.viewmodel.LoginViewModel
+import org.koin.androidx.compose.getViewModel
 
 @Composable
-fun Login(viewModel: LoginViewModel) {
+fun Login(viewModel: LoginViewModel = getViewModel()) {
 
     var user = remember { mutableStateOf("rodrire") }
     var password = remember { mutableStateOf("123456") }

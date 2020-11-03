@@ -39,7 +39,8 @@ class LoginActivity : AppCompatActivity() {
         }*/
 
         setContent {
-            MultiBottomNavApp()
+            //MultiBottomNavApp()
+            Login()
         }
     }
 
