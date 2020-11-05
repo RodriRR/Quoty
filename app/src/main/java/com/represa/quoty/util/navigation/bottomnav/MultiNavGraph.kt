@@ -1,72 +1,87 @@
 package com.represa.quoty.util.navigation.bottomnav
 
-import android.os.Bundle
+import androidx.annotation.StringRes
 import androidx.compose.foundation.Icon
 import androidx.compose.foundation.Text
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.savedinstancestate.Saver
-import androidx.compose.runtime.savedinstancestate.rememberSavedInstanceState
+import androidx.compose.ui.graphics.vector.VectorAsset
+import androidx.compose.ui.res.stringResource
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.*
+import com.represa.quoty.R
 import com.represa.quoty.ui.screen.NewQuote
 import com.represa.quoty.ui.screen.SearchView
-import com.represa.quoty.ui.theme.QuotyTheme
-import com.represa.quoty.util.navigation.*
-import com.represa.quoty.util.navigation.views.NavPhrasesTab
+
+sealed class BottomNavigationScreens(val route: String, @StringRes val resourceId: Int, val icon: VectorAsset) {
+    object Search : BottomNavigationScreens("Search", R.string.search_screen_route, Icons.Filled.Search)
+    object NewQuote : BottomNavigationScreens("NewQuote", R.string.new_quote_screen_route, Icons.Filled.AddCircle)
+    object Profile : BottomNavigationScreens("Profile", R.string.profile_screen_route, Icons.Filled.AccountCircle)
+}
 
 @Composable
 fun MultiBottomNavApp() {
-    BottomNavApp {
-        MultiNavTabContent(screen = it)
+
+    val navController = rememberNavController()
+
+    val bottomNavigationItems = listOf(
+        BottomNavigationScreens.Search,
+        BottomNavigationScreens.NewQuote,
+        BottomNavigationScreens.Profile
+    )
+    Scaffold(
+        bottomBar = {
+            SpookyAppBottomNavigation(navController, bottomNavigationItems)
+        },
+    ) {
+        MainScreenNavigationConfigurations(navController)
     }
 }
 
-@Composable
-fun MultiNavTabContent(screen: Screen) {
-    val dashboardNavState = rememberSavedInstanceState(saver = NavStateSaver()) { mutableStateOf(Bundle()) }
-    val phrasesNavState = rememberSavedInstanceState(saver = NavStateSaver()) { mutableStateOf(Bundle()) }
-    when (screen) {
-        Screen.Search    -> SearchView()
-        Screen.NewQuote  -> NewQuote()
-        Screen.Profile   -> NavPhrasesTab(phrasesNavState)
-        else             -> SearchView()
-    }
-}
+
 
 @Composable
-fun BottomNavApp(
-    bodyContent: @Composable (Screen) -> Unit
+private fun MainScreenNavigationConfigurations(
+    navController: NavHostController
 ) {
-    var currentTab by rememberSavedInstanceState(saver = ScreenSaver()) { mutableStateOf(Screen.Search) }
+    NavHost(navController, startDestination = BottomNavigationScreens.Search.route) {
+        composable(BottomNavigationScreens.Search.route) {
+            SearchView()
+        }
+        composable(BottomNavigationScreens.NewQuote.route) {
+            NewQuote()
+        }
+        composable(BottomNavigationScreens.Profile.route) {
+            NewQuote()
+        }
+    }
+}
 
-    QuotyTheme {
-        // A surface container using the 'background' color from the theme
-        Surface(color = MaterialTheme.colors.background) {
-            Scaffold(
-                bodyContent = {
-                    bodyContent(currentTab)
-                },
-                bottomBar = {
-                    BottomNavigation {
-                        BottomNavigationItem(
-                            icon = { Icon(asset = Icons.Default.Search) },
-                            label = { Text("Search") },
-                            selected = currentTab == Screen.Search,
-                            onClick = { currentTab = Screen.Search }
-                        )
-                        BottomNavigationItem(
-                            icon = { Icon(asset = Icons.Default.AddCircle) },
-                            label = { Text("New Quote") },
-                            selected = currentTab == Screen.NewQuote,
-                            onClick = { currentTab = Screen.NewQuote }
-                        )
-                        BottomNavigationItem(
-                            icon = { Icon(asset = Icons.Default.AccountCircle) },
-                            label = { Text("Profile") },
-                            selected = currentTab == Screen.Profile,
-                            onClick = { currentTab = Screen.Profile }
-                        )
+@Composable
+fun ScaryScreen() {
+
+}
+
+@Composable
+private fun SpookyAppBottomNavigation(
+    navController: NavHostController,
+    items: List<BottomNavigationScreens>
+) {
+    BottomNavigation {
+        val currentRoute = currentRoute(navController)
+        items.forEach { screen ->
+            BottomNavigationItem(
+                icon = { Icon(screen.icon) },
+                label = { Text(stringResource(id = screen.resourceId)) },
+                selected = currentRoute == screen.route,
+                alwaysShowLabels = false, // This hides the title for the unselected items
+                onClick = {
+                    // This if check gives us a "singleTop" behavior where we do not create a
+                    // second instance of the composable if we are already on that destination
+                    if (currentRoute != screen.route) {
+                        navController.navigate(screen.route)
                     }
                 }
             )
@@ -74,16 +89,8 @@ fun BottomNavApp(
     }
 }
 
-/**
- * Saver to save and restore the current tab across config change and process death.
- */
-fun ScreenSaver(
-): Saver<MutableState<Screen>, *> = Saver(
-    save = { it.value.saveState() },
-    restore = { mutableStateOf(Screen.restoreState(it)) }
-)
-
-fun NavStateSaver(): Saver<MutableState<Bundle>, out Any> = Saver(
-    save = { it.value },
-    restore = { mutableStateOf(it) }
-)
+@Composable
+private fun currentRoute(navController: NavHostController): String? {
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    return navBackStackEntry?.arguments?.getString(KEY_ROUTE)
+}

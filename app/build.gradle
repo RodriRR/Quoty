@@ -98,7 +98,7 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlin_coroutines_version"
 
     //Coil
-    implementation "dev.chrisbanes.accompanist:accompanist-coil:0.3.0"
+    implementation "dev.chrisbanes.accompanist:accompanist-coil:0.3.2"
 
     //Koin
     // Koin AndroidX Scope feature
@@ -117,5 +117,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
     //Compose navigation
-    implementation "androidx.navigation:navigation-compose:1.0.0-SNAPSHOT"
+    def nav_compose_version = "1.0.0-alpha01"
+    implementation "androidx.navigation:navigation-compose:$nav_compose_version"
 }
