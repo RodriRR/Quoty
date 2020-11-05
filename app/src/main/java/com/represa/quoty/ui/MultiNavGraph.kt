@@ -1,4 +1,4 @@
-package com.represa.quoty.util.navigation.bottomnav
+package com.represa.quoty.ui
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Icon
@@ -13,7 +13,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.*
 import com.represa.quoty.R
 import com.represa.quoty.ui.screen.NewQuote
-import com.represa.quoty.ui.screen.SearchView
+import com.represa.quoty.ui.screen.Search
 
 sealed class BottomNavigationScreens(val route: String, @StringRes val resourceId: Int, val icon: VectorAsset) {
     object Search : BottomNavigationScreens("Search", R.string.search_screen_route, Icons.Filled.Search)
@@ -48,7 +48,7 @@ private fun MainScreenNavigationConfigurations(
 ) {
     NavHost(navController, startDestination = BottomNavigationScreens.Search.route) {
         composable(BottomNavigationScreens.Search.route) {
-            SearchView()
+            Search()
         }
         composable(BottomNavigationScreens.NewQuote.route) {
             NewQuote()
@@ -57,11 +57,6 @@ private fun MainScreenNavigationConfigurations(
             NewQuote()
         }
     }
-}
-
-@Composable
-fun ScaryScreen() {
-
 }
 
 @Composable
@@ -76,7 +71,7 @@ private fun SpookyAppBottomNavigation(
                 icon = { Icon(screen.icon) },
                 label = { Text(stringResource(id = screen.resourceId)) },
                 selected = currentRoute == screen.route,
-                alwaysShowLabels = false, // This hides the title for the unselected items
+                alwaysShowLabels = true, // This show the title for the unselected items
                 onClick = {
                     // This if check gives us a "singleTop" behavior where we do not create a
                     // second instance of the composable if we are already on that destination
