@@ -20,23 +20,23 @@ fun Login(viewModel: LoginViewModel = getViewModel()) {
 
     val drawerState = rememberBottomDrawerState(BottomDrawerValue.Closed)
 
-    Stack {
+    Box {
 
         Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center) {
             Row(
-                Modifier.gravity(Alignment.CenterHorizontally).padding(0.dp, 6.dp)
+                Modifier.align(Alignment.CenterHorizontally).padding(0.dp, 6.dp)
             ) { LoginTextField(user, "user") }
             Row(
-                Modifier.gravity(Alignment.CenterHorizontally).padding(0.dp, 6.dp)
+                Modifier.align(Alignment.CenterHorizontally).padding(0.dp, 6.dp)
             ) { LoginTextField(password, "pass") }
-            Row(Modifier.gravity(Alignment.CenterHorizontally).padding(0.dp, 6.dp)) {
+            Row(Modifier.align(Alignment.CenterHorizontally).padding(0.dp, 6.dp)) {
                 LoginButton(
                     user,
                     password,
                     viewModel::login
                 )
             }
-            Row(Modifier.gravity(Alignment.CenterHorizontally).padding(0.dp, 6.dp)) {
+            Row(Modifier.align(Alignment.CenterHorizontally).padding(0.dp, 6.dp)) {
                 Button(onClick = { drawerState.expand()
                 }) {
                      Text(text = "SignUp")}
