@@ -13,6 +13,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.*
 import com.represa.quoty.R
 import com.represa.quoty.ui.screen.NewQuote
+import com.represa.quoty.ui.screen.QuoteDetail
 import com.represa.quoty.ui.screen.Search
 
 sealed class BottomNavigationScreens(val route: String, @StringRes val resourceId: Int, val icon: VectorAsset) {
@@ -48,13 +49,16 @@ private fun MainScreenNavigationConfigurations(
 ) {
     NavHost(navController, startDestination = BottomNavigationScreens.Search.route) {
         composable(BottomNavigationScreens.Search.route) {
-            Search()
+            Search(navController)
         }
         composable(BottomNavigationScreens.NewQuote.route) {
             NewQuote()
         }
         composable(BottomNavigationScreens.Profile.route) {
             NewQuote()
+        }
+        composable("quoteDetail/{id}"){ backStackEntry ->
+            QuoteDetail(backStackEntry.arguments?.getString("id"))
         }
     }
 }

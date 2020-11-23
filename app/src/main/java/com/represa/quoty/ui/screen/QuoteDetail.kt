@@ -1,29 +1,42 @@
 package com.represa.quoty.ui.screen
 
+import android.widget.Toast
 import androidx.compose.animation.ColorPropKey
 import androidx.compose.animation.core.*
 import androidx.compose.animation.transition
 import androidx.compose.foundation.Icon
+import androidx.compose.foundation.Text
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.Button
 import androidx.compose.material.Card
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawOpacity
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.ui.tooling.preview.Preview
+import com.represa.quoty.data.model.database.QuoteDatabase
+import com.represa.quoty.ui.viewmodel.MainViewModel
+import com.represa.quoty.ui.viewmodel.QuoteDetailViewModel
+import dev.chrisbanes.accompanist.coil.CoilImage
+import org.koin.androidx.compose.getViewModel
 
 @Preview
 @Composable
-fun QuoteDetail() {
+fun QuoteDetail(id: String?) {
+
+    val viewModel = getViewModel<QuoteDetailViewModel>()
+    viewModel.getQuote(id!!.toInt())
 
     var favButtonState = remember { mutableStateOf(FavButtonState.IDLE) }
 
@@ -33,12 +46,21 @@ fun QuoteDetail() {
 
         Card(elevation = 3.dp,
             modifier = Modifier.height(350.dp).width(230.dp).padding(5.dp, 5.dp, 10.dp, 5.dp)
-                .background(color = Color(0xFFFFFF)).constrainAs(quoteCard) {
+                .constrainAs(quoteCard) {
                     top.linkTo(parent.top)
                     start.linkTo(parent.start, 16.dp)
                     end.linkTo(parent.end, 16.dp)
                     bottom.linkTo(parent.bottom)
-                }) {
+                },
+        backgroundColor = Color.Red) {
+
+            Box(modifier = Modifier.fillMaxSize()) {
+                CoilImage(
+                    data = viewModel.quote.image,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
 
         }
 
@@ -69,17 +91,31 @@ fun QuoteDetail() {
             state = transitionFavButton,
             modifier = Modifier.constrainAs(favButton) {
                 start.linkTo(parent.start)
-                top.linkTo(bottomCard.bottom)
+                top.linkTo(parent.top)
                 end.linkTo(parent.end)
-                bottom.linkTo(parent.bottom)
+                bottom.linkTo(quoteCard.top)
             })
     }
+}
+
+@Composable
+fun prueba(text : State<String>){
+    Text(text = text.value)
 }
 
 enum class FavButtonState {
     INIT,
     IDLE,
     PRESSED
+}
+
+@Composable
+fun CardImage(quote : MutableState<QuoteDatabase>){
+    CoilImage(
+        data = quote.value.image,
+        contentScale = ContentScale.Crop,
+        modifier = Modifier.fillMaxSize()
+    )
 }
 
 @Composable
@@ -97,12 +133,6 @@ fun FavButton(
                     FavButtonState.IDLE
                 }
             })
-        /*.constrainAs(favButton) {
-           start.linkTo(parent.start)
-           top.linkTo(bottomCard.bottom)
-           end.linkTo(parent.end)
-           bottom.linkTo(parent.bottom)
-       },*/
     ) {
         ButtonContent(buttonState = buttonState, state = state)
     }
