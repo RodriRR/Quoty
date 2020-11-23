@@ -55,7 +55,7 @@ fun QuoteDetail(id: String?) {
 
             Box(modifier = Modifier.fillMaxSize()) {
                 CoilImage(
-                    data = viewModel.quote.image,
+                    data = viewModel.image,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier.fillMaxSize()
                 )
@@ -88,15 +88,6 @@ enum class FavButtonState {
     INIT,
     IDLE,
     PRESSED
-}
-
-@Composable
-fun CardImage(quote : MutableState<QuoteDatabase>){
-    CoilImage(
-        data = quote.value.image,
-        contentScale = ContentScale.Crop,
-        modifier = Modifier.fillMaxSize()
-    )
 }
 
 @Composable
