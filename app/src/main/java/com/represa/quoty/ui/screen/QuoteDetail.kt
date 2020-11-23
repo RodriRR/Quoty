@@ -38,7 +38,7 @@ fun QuoteDetail(id: String?) {
     val viewModel = getViewModel<QuoteDetailViewModel>()
     viewModel.getQuote(id!!.toInt())
 
-    var favButtonState = remember { mutableStateOf(FavButtonState.IDLE) }
+    var favButtonState =  remember { mutableStateOf(FavButtonState.IDLE) }
 
     ConstraintLayout(Modifier.fillMaxSize().background(Color.Black)) {
 
@@ -117,14 +117,14 @@ fun ButtonContent(
 ) {
     if (buttonState.value == FavButtonState.PRESSED) { //1
         Icon(
-            tint = Color.White,
-            asset = Icons.Default.FavoriteBorder,
-        )
-    } else {
-        Icon(
             tint = state[favButtonBackgroundColor],
             asset = Icons.Default.Favorite, //copy(defaultHeight = state[], defaultWidth = ),
             modifier = Modifier.drawOpacity(state[favButtonPressedOpacity])
+        )
+    } else {
+        Icon(
+            tint = Color.White,
+            asset = Icons.Default.FavoriteBorder
         )
     }
 }
@@ -136,13 +136,13 @@ private val favButtonSize = IntPropKey()
 
 private fun favButtonTransition() = transitionDefinition<FavButtonState> {
     state(FavButtonState.IDLE) {
-        this[favButtonPressedOpacity] = 0f
-        this[favButtonBackgroundColor] = Color.White
+        this[favButtonPressedOpacity] = 1f
+        this[favButtonBackgroundColor] = Color.Red
     }
 
     state(FavButtonState.PRESSED) {
-        this[favButtonPressedOpacity] = 1f
-        this[favButtonBackgroundColor] = Color.Red
+        this[favButtonPressedOpacity] = 0f
+        this[favButtonBackgroundColor] = Color.White
     }
 
     transition(
