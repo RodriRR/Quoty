@@ -38,7 +38,7 @@ fun QuoteCard(
             elevation = 3.dp,
             modifier = Modifier.height(350.dp).width(230.dp).padding(5.dp, 5.dp, 10.dp, 5.dp)
                 .clickable(
-                    onClick = { viewModel.prueba(quote.image); navController.navigate("quoteDetail/" + quote.id) }
+                    onClick = { navController.navigate("quoteDetail/" + quote.id) }
                 ),
         ) {
 

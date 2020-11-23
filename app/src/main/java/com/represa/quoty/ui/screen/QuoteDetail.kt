@@ -47,10 +47,9 @@ fun QuoteDetail(id: String?) {
         Card(elevation = 3.dp,
             modifier = Modifier.height(350.dp).width(230.dp).padding(5.dp, 5.dp, 10.dp, 5.dp)
                 .constrainAs(quoteCard) {
-                    top.linkTo(parent.top)
+                    top.linkTo(parent.top, 50.dp)
                     start.linkTo(parent.start, 16.dp)
                     end.linkTo(parent.end, 16.dp)
-                    bottom.linkTo(parent.bottom)
                 },
         backgroundColor = Color.Red) {
 
@@ -61,18 +60,6 @@ fun QuoteDetail(id: String?) {
                     modifier = Modifier.fillMaxSize()
                 )
             }
-
-        }
-
-        Card(
-            elevation = 3.dp,
-            modifier = Modifier.height(50.dp).width(350.dp).background(Color.White)
-                .constrainAs(bottomCard) {
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                    top.linkTo(quoteCard.bottom)
-                }
-        ) {
 
         }
 
@@ -91,16 +78,10 @@ fun QuoteDetail(id: String?) {
             state = transitionFavButton,
             modifier = Modifier.constrainAs(favButton) {
                 start.linkTo(parent.start)
-                top.linkTo(parent.top)
                 end.linkTo(parent.end)
-                bottom.linkTo(quoteCard.top)
+                bottom.linkTo(parent.bottom, 100.dp)
             })
     }
-}
-
-@Composable
-fun prueba(text : State<String>){
-    Text(text = text.value)
 }
 
 enum class FavButtonState {
