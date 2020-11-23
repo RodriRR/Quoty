@@ -6,7 +6,7 @@ import com.represa.quoty.data.model.network.images.Image
 
 object QuoteConverter{
 
-    fun quoteNetworkToDatabase(quoteNetwork: QuoteNetwork, image : Image) : QuoteDatabase{
+    fun quoteNetworkToDatabase(quoteNetwork: QuoteNetwork, image : Image, favourite: Boolean) : QuoteDatabase{
         return QuoteDatabase(quoteNetwork.id,
             quoteNetwork.dialogue,
             quoteNetwork.dialogue,
@@ -17,6 +17,7 @@ object QuoteConverter{
             quoteNetwork.downvotes_count,
             quoteNetwork.author,
             quoteNetwork.body,
-            image.urls.small)
+            image.urls.small,
+            favourite)
     }
 }
