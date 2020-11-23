@@ -13,135 +13,134 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.WithConstraints
 import androidx.compose.ui.draw.drawOpacity
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.represa.quoty.ui.components.QuoteCard
 import com.represa.quoty.ui.viewmodel.MainViewModel
 import com.represa.quoty.util.ui.AbsoluteAlignment
-import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.getViewModel
 
 
 @Composable
-fun Search(viewModel: MainViewModel = getViewModel()) {
+fun Search(navController: NavHostController, viewModel: MainViewModel = getViewModel()) {
     Surface(Modifier.fillMaxSize()) {
 
-        WithConstraints() {
+        Box(Modifier.fillMaxSize()) {
 
-            Box(Modifier.fillMaxSize()) {
+            //Quotes to be shown
+            var quotesSearched = viewModel.flow.collectAsState(initial = emptyList())
 
-                //Quotes to be shown
-                var quotesSearched = viewModel.flow.collectAsState(initial = emptyList())
+            //To make transitions possible, we need a var to determinete in which
+            //state we are, if searchmode = true -> searching
+            var searchMode by remember { mutableStateOf<Boolean>(false) }
 
-                //To make transitions possible, we need a var to determinete in which
-                //state we are, if searchmode = true -> searching
-                var searchMode by remember { mutableStateOf<Boolean>(false) }
+            val transitionQuotesAlpha = transition(
+                definition = remember { quotesTransition() },
+                initState = QuotesState.QuotesHidden,
+                toState = if (!quotesSearched.value.isNullOrEmpty()) {
+                    QuotesState.QuotesShown
+                } else {
+                    QuotesState.QuotesHidden
+                },
+            )
 
-                val transitionQuotesAlpha = transition(
-                    definition = remember { quotesTransition() },
-                    initState = QuotesState.QuotesHidden,
-                    toState = if (!quotesSearched.value.isNullOrEmpty()) {
-                        QuotesState.QuotesShown
-                    } else {
-                        QuotesState.QuotesHidden
-                    },
+            val quotesAlpha = transitionQuotesAlpha[quotesAlpha]
+
+            //This var manage the visibility of the quote searched
+            var visibility by remember { mutableStateOf(false) }
+
+            //This Box will show the quotes searched
+            Box(
+                modifier = Modifier.drawOpacity(quotesAlpha).wrapContentHeight()
+                    .fillMaxWidth().align(Alignment.CenterStart)
+            ) {
+                LazyRowFor(
+                    items = quotesSearched.value,
+                    itemContent = { QuoteCard(navController, it) },
                 )
+            }
 
-                val quotesAlpha = transitionQuotesAlpha[quotesAlpha]
-
-                //This var manage the visibility of the quote searched
-                var visibility by remember { mutableStateOf(false) }
-
-                //This Box will show the quotes searched
-                Box(
-                    modifier = Modifier.drawOpacity(quotesAlpha).wrapContentHeight()
-                        .fillMaxWidth().align(Alignment.CenterStart)
-                ) {
-                    LazyRowFor(
-                        items = quotesSearched.value,
-                        itemContent = { QuoteCard(it) },
-                    )
+            //If we are in the state SearchDisable and then we click on the searchField
+            //We are going to transit to the SearchEnable state
+            val transitionSearchColumn = transition(
+                definition = remember { searchTransition() },
+                initState = SearchComponentState.SearchDisabled,
+                toState = if (!quotesSearched.value.isNullOrEmpty()) {
+                    SearchComponentState.SearchEnabled
+                } else {
+                    SearchComponentState.SearchDisabled
+                },
+                //When finish transition show the quotes view
+                onStateChangeFinished = { state ->
+                    when (state) {
+                        //SearchComponentState.SearchEnabled -> visibility = true
+                    }
                 }
+            )
 
-                //If we are in the state SearchDisable and then we click on the searchField
-                //We are going to transit to the SearchEnable state
-                val transitionSearchColumn = transition(
-                    definition = remember { searchTransition() },
-                    initState = SearchComponentState.SearchDisabled,
-                    toState = if (!quotesSearched.value.isNullOrEmpty()) {
-                        SearchComponentState.SearchEnabled
-                    } else {
-                        SearchComponentState.SearchDisabled
-                    },
-                    //When finish transition show the quotes view
-                    onStateChangeFinished = { state ->
-                        when (state) {
-                            //SearchComponentState.SearchEnabled -> visibility = true
+            //If we are in the state SearchDisable and then we click on the searchField
+            //We are going to transit to the SearchEnable state
+            val transitionTitle = transition(
+                definition = remember { titleTransition() },
+                initState = TitleState.QuotesHidden,
+                toState = if (!quotesSearched.value.isNullOrEmpty()) {
+                    TitleState.QuotesShown
+                } else {
+                    TitleState.QuotesHidden
+                }
+            )
+
+            val verticalBias = transitionSearchColumn[searchComponentVerticalBias]
+            val titleAlpha = transitionTitle[titleAlpha]
+
+            Column(
+                modifier = Modifier.align(AbsoluteAlignment(verticalBias))
+            ) {
+                Text(
+                    modifier = Modifier.height((titleAlpha * 100).dp).drawOpacity(titleAlpha)
+                        .clickable(onClick = { }),
+                    text = "Find Your \nQuote",
+                    fontSize = 33.sp,
+                    lineHeight = 33.sp
+                )
+
+                var textField by remember { mutableStateOf("") }
+
+                Row(Modifier.padding(0.dp, 10.dp, 0.dp, 0.dp)) {
+
+                    TextField(
+                        modifier = Modifier.background(Color.Red),
+                        value = viewModel.search,
+                        //onTextInputStarted = { searchMode = true },
+                        onValueChange = { viewModel.setSearchQuery(it); viewModel.search = it },
+                        label = { Text(text = "search") },
+                        onImeActionPerformed = { action, softwareController ->
+                            if (action == ImeAction.Done) {
+                                softwareController!!.hideSoftwareKeyboard()
+                            }
                         }
-                    }
-                )
-
-                //If we are in the state SearchDisable and then we click on the searchField
-                //We are going to transit to the SearchEnable state
-                val transitionTitle = transition(
-                    definition = remember { titleTransition() },
-                    initState = TitleState.QuotesHidden,
-                    toState = if (!quotesSearched.value.isNullOrEmpty()) {
-                        TitleState.QuotesShown
-                    } else {
-                        TitleState.QuotesHidden
-                    }
-                )
-
-                val verticalBias = transitionSearchColumn[searchComponentVerticalBias]
-                val titleAlpha = transitionTitle[titleAlpha]
-
-                Column(
-                    modifier = Modifier.align(AbsoluteAlignment(verticalBias))
-                ) {
-                    Text(
-                        modifier = Modifier.height((titleAlpha*100).dp).drawOpacity(titleAlpha)
-                            .clickable(onClick = { }),
-                        text = "Find Your \nQuote",
-                        fontSize = 33.sp,
-                        lineHeight = 33.sp
                     )
 
-                    var textField by remember { mutableStateOf("") }
-
-                    Row(Modifier.padding(0.dp, 10.dp, 0.dp, 0.dp)) {
-
-                        TextField(
-                            modifier = Modifier.background(Color.Red),
-                            value = viewModel.search,
-                            //onTextInputStarted = { searchMode = true },
-                            onValueChange = { viewModel.setSearchQuery(it); viewModel.search = it },
-                            label = { Text(text = "search") },
-                            imeAction = ImeAction.Done,
-                            onImeActionPerformed = { action, softwareController ->
-                                if (action == ImeAction.Done) {
-                                    softwareController!!.hideSoftwareKeyboard()
-                                }
-                            }
-                        )
-
-                        //Hidde quotes and transitate to SearchDisable
-                        Button(modifier = Modifier.drawOpacity(quotesAlpha),
-                            onClick = {
+                    //Hidde quotes and transitate to SearchDisable
+                    Button(modifier = Modifier.drawOpacity(quotesAlpha),
+                        onClick = {
                             viewModel.clearQuotesFlow(); textField = "clear"; visibility = false
                         }) {
-                            Text(text = "clear")
-                        }
+                        Text(text = "clear")
                     }
-
-                    Text(text = "Results", modifier = Modifier.padding(0.dp,10.dp,0.dp,0.dp).height((quotesAlpha*20).dp))
                 }
 
+                Text(
+                    text = "Results",
+                    modifier = Modifier.padding(0.dp, 10.dp, 0.dp, 0.dp)
+                        .height((quotesAlpha * 20).dp)
+                )
             }
+
         }
     }
 }
