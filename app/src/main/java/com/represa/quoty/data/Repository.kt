@@ -48,7 +48,7 @@ class Repository(private val QDatabase: QDatabase) {
         QDatabase.quoteDao().insertListOfQuotes(quotes)
     }
 
-    fun getQuote(id: Int) : QuoteDatabase{
+    suspend fun getQuote(id: Int) : QuoteDatabase {
         return QDatabase.quoteDao().getQuote(id)
     }
 
