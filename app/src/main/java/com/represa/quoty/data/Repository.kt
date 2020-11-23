@@ -40,6 +40,11 @@ class Repository(private val QDatabase: QDatabase) {
         }
     }
 
+    suspend fun getFavouritesQuote() : List<QuoteNetwork>{
+        val quotes = QuoteApi.QUOTE_SERVICE.getFavouriteQuotes(token,"rodrire","user")
+        return quotes.quotes
+    }
+
     fun insert(quote: QuoteDatabase) {
         QDatabase.quoteDao().insertQuote(quote)
     }

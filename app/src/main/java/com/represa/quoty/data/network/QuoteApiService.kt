@@ -41,6 +41,10 @@ interface QuoteApiService {
     suspend fun getQuotes(@Header("Authorization") authHeader: String, @Query("filter") filter: String): ResponseQuotes
 
     @Headers("Content-Type: application/json")
+    @GET("quotes")
+    suspend fun getFavouriteQuotes(@Header("Authorization") authHeader: String, @Query("filter") filter: String, @Query("type") user: String): ResponseQuotes
+
+    @Headers("Content-Type: application/json")
     @POST("quotes")
     suspend fun createQuote(@Header("Authorization") authHeader: String, @Header("User-Token") sessionToken: String, @Body body: NewQuote): QuoteNetwork
 
