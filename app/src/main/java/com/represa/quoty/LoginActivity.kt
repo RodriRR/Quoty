@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.ui.platform.setContent
 import androidx.lifecycle.Observer
 import com.represa.quoty.data.model.network.quote.LoginStatus
+import com.represa.quoty.ui.MultiBottomNavApp
 import com.represa.quoty.ui.screen.Login
 import com.represa.quoty.ui.theme.QuotyTheme
 import com.represa.quoty.ui.viewmodel.LoginViewModel
@@ -23,8 +24,9 @@ class LoginActivity : AppCompatActivity() {
         startObservers()
 
         setContent {
-            QuotyTheme() {
-                Login()
+            QuotyTheme {
+                //Login()
+                MultiBottomNavApp()
             }
         }
     }
