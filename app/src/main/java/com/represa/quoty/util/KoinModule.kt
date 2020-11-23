@@ -5,6 +5,7 @@ import com.represa.quoty.data.database.QDatabase
 import com.represa.quoty.ui.viewmodel.LoginViewModel
 import com.represa.quoty.ui.viewmodel.MainViewModel
 import com.represa.quoty.ui.viewmodel.NewQuoteViewModel
+import com.represa.quoty.ui.viewmodel.QuoteDetailViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -17,5 +18,5 @@ val appModule = module {
     viewModel { LoginViewModel(get()) }
     viewModel { MainViewModel(get()) }
     viewModel { NewQuoteViewModel(get()) }
-
+    viewModel { QuoteDetailViewModel(get()) }
 }
