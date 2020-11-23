@@ -98,9 +98,11 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlin_coroutines_version"
 
     //Coil
-    implementation "dev.chrisbanes.accompanist:accompanist-coil:0.3.2"
+    implementation "dev.chrisbanes.accompanist:accompanist-coil:0.3.3.1"
 
     //Koin
+    implementation "org.koin:koin-core:$koin_version"
+    implementation "org.koin:koin-android:$koin_version"
     // Koin AndroidX Scope feature
     implementation "org.koin:koin-androidx-scope:$koin_version"
     // Koin AndroidX ViewModel feature
@@ -111,12 +113,14 @@ dependencies {
     implementation "org.koin:koin-androidx-workmanager:$koin_version"
     // Koin AndroidX Compose (unstable version)
     implementation "org.koin:koin-androidx-compose:$koin_version"
+    // Koin AndroidX Experimental features
+    implementation "org.koin:koin-androidx-ext:$koin_version"
 
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
     //Compose navigation
-    def nav_compose_version = "1.0.0-alpha01"
+    def nav_compose_version = "1.0.0-alpha02"
     implementation "androidx.navigation:navigation-compose:$nav_compose_version"
 }
