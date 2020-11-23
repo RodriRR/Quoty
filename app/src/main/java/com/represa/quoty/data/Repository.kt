@@ -48,6 +48,10 @@ class Repository(private val QDatabase: QDatabase) {
         QDatabase.quoteDao().insertListOfQuotes(quotes)
     }
 
+    fun getQuote(id: Int) : QuoteDatabase{
+        return QDatabase.quoteDao().getQuote(id)
+    }
+
     suspend fun createNewQuote(quote : NewQuote) : QuoteNetwork{
         return QuoteApi.QUOTE_SERVICE.createQuote(token, sessionToken.userToken, quote)
     }

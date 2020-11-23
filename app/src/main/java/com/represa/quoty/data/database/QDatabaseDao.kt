@@ -10,6 +10,9 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface QDatabaseDao {
 
+    @Query("SELECT * FROM quotes WHERE id = :id")
+    fun getQuote(id : Int): QuoteDatabase
+
     @Query("SELECT * FROM quotes WHERE body LIKE '%' || :search || '%' ")
     fun getPrueba(search : String): Flow<List<QuoteDatabase>>
 
