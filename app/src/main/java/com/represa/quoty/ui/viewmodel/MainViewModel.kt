@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.represa.quoty.data.Repository
 import com.represa.quoty.data.model.database.QuoteDatabase
 import com.represa.quoty.data.model.network.images.Image
+import com.represa.quoty.data.model.network.quote.QuoteNetwork
 import com.represa.quoty.util.QuoteConverter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
@@ -19,6 +20,8 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
     private val SEARCH_DELAY_MILLIS = 650L
 
     var search by mutableStateOf("")
+
+    lateinit var favouritesQuotes : List<QuoteNetwork>
 
     /*var prueba by mutableStateOf(listOf<String>())
         private set*/
@@ -32,6 +35,7 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
 
     init {
         clearDatabase()
+        getFavouritesQuotes()
     }
 
     fun setSearchQuery(search: String) {
@@ -47,7 +51,7 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
                     var images = getRandomImages(response.size)
                     var quotes: MutableList<QuoteDatabase> = mutableListOf()
                     for (i in response.indices) {
-                        quotes.add(QuoteConverter.quoteNetworkToDatabase(response[i], images[i]))
+                        quotes.add(QuoteConverter.quoteNetworkToDatabase(response[i], images[i], isFavourite(response[i])))
                     }
                     repository.insertListOfQuotes(quotes)
                 } catch (e: Exception) {
@@ -70,6 +74,16 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
     fun clearQuotesFlow() {
         search = ""
         searchChanel.offer(search)
+    }
+
+    private fun getFavouritesQuotes(){
+        viewModelScope.launch {
+            favouritesQuotes = repository.getFavouritesQuote()
+        }
+    }
+
+    private fun isFavourite(quote : QuoteNetwork) : Boolean{
+        return favouritesQuotes.contains(quote)
     }
 }
 
