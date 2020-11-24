@@ -1,23 +1,18 @@
 package com.represa.quoty.ui.screen
 
-import android.widget.Toast
 import androidx.compose.animation.ColorPropKey
 import androidx.compose.animation.core.*
 import androidx.compose.animation.transition
 import androidx.compose.foundation.Icon
-import androidx.compose.foundation.Text
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
 import androidx.compose.material.Card
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawOpacity
@@ -25,8 +20,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.ui.tooling.preview.Preview
-import com.represa.quoty.data.model.database.QuoteDatabase
-import com.represa.quoty.ui.viewmodel.MainViewModel
 import com.represa.quoty.ui.viewmodel.QuoteDetailViewModel
 import dev.chrisbanes.accompanist.coil.CoilImage
 import org.koin.androidx.compose.getViewModel
@@ -38,7 +31,7 @@ fun QuoteDetail(id: String?) {
     val viewModel = getViewModel<QuoteDetailViewModel>()
     viewModel.getQuote(id!!.toInt())
 
-    var favButtonState : MutableState<FavButtonState> =  remember { viewModel.prueba }
+    var favButtonState : MutableState<FavButtonState> =  remember { viewModel.isFavourite }
 
     ConstraintLayout(Modifier.fillMaxSize().background(Color.Black)) {
 
@@ -80,7 +73,8 @@ fun QuoteDetail(id: String?) {
                 start.linkTo(parent.start)
                 end.linkTo(parent.end)
                 bottom.linkTo(parent.bottom, 100.dp)
-            })
+            },
+            viewModel = viewModel)
     }
 }
 
@@ -94,15 +88,16 @@ enum class FavButtonState {
 fun FavButton(
     buttonState: MutableState<FavButtonState>,
     state: TransitionState,
-    modifier: Modifier
+    modifier: Modifier,
+    viewModel : QuoteDetailViewModel
 ) {
     Box(
         modifier = modifier.clickable(
             onClick = {
-                buttonState.value = if (buttonState.value == FavButtonState.IDLE) {
-                    FavButtonState.PRESSED
+               /* buttonState.value = */if (buttonState.value == FavButtonState.IDLE) {
+                    viewModel.favQuote() //FavButtonState.PRESSED
                 } else {
-                    FavButtonState.IDLE
+                     //FavButtonState.IDLE
                 }
             })
     ) {

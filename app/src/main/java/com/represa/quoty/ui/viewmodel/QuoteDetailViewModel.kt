@@ -1,6 +1,7 @@
 package com.represa.quoty.ui.viewmodel
 
 
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -9,11 +10,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.represa.quoty.data.Repository
 import com.represa.quoty.data.model.database.QuoteDatabase
-import com.represa.quoty.data.model.network.quote.QuoteNetwork
 import com.represa.quoty.ui.screen.FavButtonState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.lang.Exception
 
 class QuoteDetailViewModel(private val repository: Repository) : ViewModel() {
 
@@ -22,7 +23,7 @@ class QuoteDetailViewModel(private val repository: Repository) : ViewModel() {
     var image by mutableStateOf("")
         private set
 
-    var prueba : MutableState<FavButtonState> = mutableStateOf(FavButtonState.IDLE)
+    var isFavourite : MutableState<FavButtonState> = mutableStateOf(FavButtonState.IDLE)
         private set
 
     init {
@@ -34,7 +35,7 @@ class QuoteDetailViewModel(private val repository: Repository) : ViewModel() {
             favouriteQuotes = repository.getFavouritesQuote()
             withContext(Dispatchers.Main){
                 if(favouriteQuotes.contains(quote)){
-                    prueba.value = FavButtonState.PRESSED
+                    isFavourite.value = FavButtonState.PRESSED
                 }
             }
         }
@@ -46,6 +47,17 @@ class QuoteDetailViewModel(private val repository: Repository) : ViewModel() {
                 quote = repository.getQuote(id)
             }
             image = quote.image
+        }
+    }
+
+    fun favQuote(){
+        viewModelScope.launch {
+            withContext(Dispatchers.IO){
+                repository.favQuote(quote.id)
+                quote.favourite = true
+                repository.insert(quote)
+            }
+            isFavourite.value = FavButtonState.PRESSED
         }
     }
 }

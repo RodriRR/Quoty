@@ -57,12 +57,16 @@ class Repository(private val QDatabase: QDatabase) {
         return quotes.quotes
     }
 
-    suspend fun getFavouritesQuote() : List<QuoteDatabase> {
+    fun getFavouritesQuote() : List<QuoteDatabase> {
         return QDatabase.quoteDao().getFavouritesQuotes()
     }
 
     suspend fun createNewQuote(quote : NewQuote) : QuoteNetwork{
         return QuoteApi.QUOTE_SERVICE.createQuote(token, sessionToken.userToken, quote)
+    }
+
+    suspend fun favQuote(id : Int){
+        QuoteApi.QUOTE_SERVICE.favQuote(token, sessionToken.userToken, id)
     }
 
     fun clear() {
