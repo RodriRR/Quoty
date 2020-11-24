@@ -69,6 +69,10 @@ class Repository(private val QDatabase: QDatabase) {
         QuoteApi.QUOTE_SERVICE.favQuote(token, sessionToken.userToken, id)
     }
 
+    suspend fun unFavQuote(id : Int){
+        QuoteApi.QUOTE_SERVICE.unFavQuote(token, sessionToken.userToken, id)
+    }
+
     fun clear() {
         QDatabase.clearAllTables()
     }

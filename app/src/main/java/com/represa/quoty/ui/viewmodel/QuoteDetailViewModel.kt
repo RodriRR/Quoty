@@ -60,6 +60,17 @@ class QuoteDetailViewModel(private val repository: Repository) : ViewModel() {
             isFavourite.value = FavButtonState.PRESSED
         }
     }
+
+    fun unFavQuote(){
+        viewModelScope.launch {
+            withContext(Dispatchers.IO){
+                repository.unFavQuote(quote.id)
+                quote.favourite = false
+                repository.insert(quote)
+            }
+            isFavourite.value = FavButtonState.IDLE
+        }
+    }
 }
 
 

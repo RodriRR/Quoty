@@ -52,6 +52,10 @@ interface QuoteApiService {
     @PUT("quotes/{quote_id}/fav")
     suspend fun favQuote(@Header("Authorization") authHeader: String, @Header("User-Token") userToken: String, @Path("quote_id") id: Int): QuoteNetwork
 
+    @Headers("Content-Type: application/json")
+    @PUT("quotes/{quote_id}/unfav")
+    suspend fun unFavQuote(@Header("Authorization") authHeader: String, @Header("User-Token") userToken: String, @Path("quote_id") id: Int): QuoteNetwork
+
     /*@Headers("Content-Type: application/json")
     @POST("users")
     suspend fun createUser(@Header("Authorization") authHeader: String, @Body body: UserRequest): UserCreateResponse

@@ -97,7 +97,7 @@ fun FavButton(
                /* buttonState.value = */if (buttonState.value == FavButtonState.IDLE) {
                     viewModel.favQuote() //FavButtonState.PRESSED
                 } else {
-                     //FavButtonState.IDLE
+                viewModel.unFavQuote()//FavButtonState.IDLE
                 }
             })
     ) {
