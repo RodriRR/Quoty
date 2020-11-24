@@ -38,7 +38,7 @@ fun QuoteDetail(id: String?) {
     val viewModel = getViewModel<QuoteDetailViewModel>()
     viewModel.getQuote(id!!.toInt())
 
-    var favButtonState =  remember { mutableStateOf(FavButtonState.IDLE) }
+    var favButtonState : MutableState<FavButtonState> =  remember { viewModel.prueba }
 
     ConstraintLayout(Modifier.fillMaxSize().background(Color.Black)) {
 
