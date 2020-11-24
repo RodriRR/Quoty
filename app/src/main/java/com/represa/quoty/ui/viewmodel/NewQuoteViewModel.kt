@@ -30,7 +30,7 @@ class NewQuoteViewModel(private val repository: Repository) : ViewModel() {
             try {
                 var images = getRandomImage()
                 var response = repository.createNewQuote(quote)
-                var quoteDatabase = QuoteConverter.quoteNetworkToDatabase(response, images[0])
+                var quoteDatabase = QuoteConverter.quoteNetworkToDatabase(response, images[0], false)
                 repository.insert(quoteDatabase)
             }catch ( e : Exception){
                 Log.e("CREATE NEW QUOTE ERROR", e.toString())
