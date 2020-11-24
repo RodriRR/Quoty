@@ -14,10 +14,13 @@ interface QDatabaseDao {
     suspend fun getQuote(id : Int): QuoteDatabase
 
     @Query("SELECT * FROM quotes WHERE body LIKE '%' || :search || '%' ")
-    fun getPrueba(search : String): Flow<List<QuoteDatabase>>
+    fun getQuoteFiltered(search : String): Flow<List<QuoteDatabase>>
 
     @Query("SELECT * FROM quotes")
     fun getAllQuotes(): Flow<List<QuoteDatabase>>
+
+    @Query("SELECT * FROM quotes WHERE favourite = 1 ")
+    fun getFavouritesQuotes(): List<QuoteDatabase>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertQuote(quote: QuoteDatabase)

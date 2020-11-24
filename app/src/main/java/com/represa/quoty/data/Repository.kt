@@ -36,13 +36,8 @@ class Repository(private val QDatabase: QDatabase) {
         if (search.isEmpty()) {
             return flow { emit(emptyList<QuoteDatabase>()) }
         } else {
-            return QDatabase.quoteDao().getPrueba(s)
+            return QDatabase.quoteDao().getQuoteFiltered(s)
         }
-    }
-
-    suspend fun getFavouritesQuote() : List<QuoteNetwork>{
-        val quotes = QuoteApi.QUOTE_SERVICE.getFavouriteQuotes(token,"rodrire","user")
-        return quotes.quotes
     }
 
     fun insert(quote: QuoteDatabase) {
@@ -55,6 +50,15 @@ class Repository(private val QDatabase: QDatabase) {
 
     suspend fun getQuote(id: Int) : QuoteDatabase {
         return QDatabase.quoteDao().getQuote(id)
+    }
+
+    suspend fun fetchFavouritesQuote() : List<QuoteNetwork>{
+        val quotes = QuoteApi.QUOTE_SERVICE.getFavouriteQuotes(token,"rodrire","user")
+        return quotes.quotes
+    }
+
+    suspend fun getFavouritesQuote() : List<QuoteDatabase> {
+        return QDatabase.quoteDao().getFavouritesQuotes()
     }
 
     suspend fun createNewQuote(quote : NewQuote) : QuoteNetwork{
