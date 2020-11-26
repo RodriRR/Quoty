@@ -77,7 +77,7 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
     }
 
     private fun getFavouritesQuotes(){
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             favouritesQuotes = repository.fetchFavouritesQuote()
         }
     }
