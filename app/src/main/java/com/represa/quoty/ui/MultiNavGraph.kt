@@ -2,7 +2,6 @@ package com.represa.quoty.ui
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Icon
-import androidx.compose.foundation.Text
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
