@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.represa.quoty.data.Repository
 import com.represa.quoty.data.model.database.QuoteDatabase
 import com.represa.quoty.data.model.network.images.Image
+import com.represa.quoty.data.model.network.images.Urls
 import com.represa.quoty.data.model.network.quote.QuoteNetwork
 import com.represa.quoty.util.QuoteConverter
 import kotlinx.coroutines.Dispatchers
@@ -47,13 +48,25 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
         if (!search.isNullOrEmpty()) {
             viewModelScope.launch(Dispatchers.IO) {
                 try {
-                    var response = repository.fetchQuotes(search)
-                    var images = getRandomImages(response.size)
-                    var quotes: MutableList<QuoteDatabase> = mutableListOf()
-                    for (i in response.indices) {
-                        quotes.add(QuoteConverter.quoteNetworkToDatabase(response[i], images[i], isFavourite(response[i])))
+                    var lastPage = false
+                    var page = 1
+                    while(!lastPage) {
+                        var response = repository.fetchQuotesPaged(search, page)
+                        lastPage = response.last_page
+                        page++
+                        var images = getRandomImages(search, response.quotes.size)
+                        var quotes: MutableList<QuoteDatabase> = mutableListOf()
+                        for (i in response.quotes.indices) {
+                            quotes.add(
+                                QuoteConverter.quoteNetworkToDatabase(
+                                    response.quotes[i],
+                                    images[i],
+                                    isFavourite(response.quotes[i])
+                                )
+                            )
+                        }
+                        repository.insertListOfQuotes(quotes)
                     }
-                    repository.insertListOfQuotes(quotes)
                 } catch (e: Exception) {
                     println(e)
                 }
@@ -61,8 +74,8 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
         }
     }
 
-    private suspend fun getRandomImages(quantity: Int): List<Image> {
-        return repository.getRandomImages(search, quantity)
+    private suspend fun getRandomImages(key: String, quantity: Int): List<Image> {
+        return repository.getRandomImages(key, quantity)
     }
 
     private fun clearDatabase() {

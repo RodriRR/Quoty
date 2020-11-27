@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.flow
 
 class Repository(private val QDatabase: QDatabase) {
 
-    private val token = "Token token=\"4661b9eaf0ecc8c6df21036b10531423\""
+    private val token = "Token token=\"11de5f0c70c753274e4793c6b3110a57\""
 
     private val tokenImage = "Client-ID ybXJuGl66vW0oUXIzsuK1JY7DLJ-Im9Wk0cjnX_nOak"
 
@@ -27,8 +27,12 @@ class Repository(private val QDatabase: QDatabase) {
         }
     }
 
-    suspend fun fetchQuotes(search: String): List<QuoteNetwork> {
-        return QuoteApi.QUOTE_SERVICE.getQuotes(token, search).quotes
+    suspend fun fetchQuotes(search: String): ResponseQuotes {
+        return QuoteApi.QUOTE_SERVICE.getQuotes(token, search)
+    }
+
+    suspend fun fetchQuotesPaged(search: String, pageNumber : Int): ResponseQuotes {
+        return QuoteApi.QUOTE_SERVICE.getQuotesPaged(token, search, pageNumber)
     }
 
     fun searchQuotes(search: String): Flow<List<QuoteDatabase>> {

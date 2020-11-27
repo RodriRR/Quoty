@@ -42,6 +42,10 @@ interface QuoteApiService {
 
     @Headers("Content-Type: application/json")
     @GET("quotes")
+    suspend fun getQuotesPaged(@Header("Authorization") authHeader: String, @Query("filter") filter: String, @Query("page") pageNumber: Int): ResponseQuotes
+
+    @Headers("Content-Type: application/json")
+    @GET("quotes")
     suspend fun getFavouriteQuotes(@Header("Authorization") authHeader: String, @Query("filter") filter: String, @Query("type") user: String): ResponseQuotes
 
     @Headers("Content-Type: application/json")
