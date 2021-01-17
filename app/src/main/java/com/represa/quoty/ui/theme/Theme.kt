@@ -20,9 +20,10 @@ private val LightColors = lightColors(
 private val DarkColors = darkColors(
     primary = Red300,
     primaryVariant = Red700,
-    onPrimary = Color.Black,
+    onPrimary = Color.Green,
     secondary = Red300,
     onSecondary = Color.White,
+    onSurface = DarkSurface,
     error = Red200
 )
 
@@ -35,7 +36,7 @@ fun QuotyTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable(
     }*/
 
     MaterialTheme(
-        colors = if (darkTheme) DarkColors else LightColors,
+        colors = DarkColors, //if (darkTheme) DarkColors else LightColors,
         content = content,
         typography = QuotyTypography,
         //shapes = QuotyShapes

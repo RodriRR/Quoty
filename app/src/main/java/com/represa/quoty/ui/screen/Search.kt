@@ -14,11 +14,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawOpacity
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.represa.quoty.ui.components.QuoteCard
+import com.represa.quoty.ui.theme.DarkSurface
 import com.represa.quoty.ui.viewmodel.MainViewModel
 import com.represa.quoty.util.ui.AbsoluteAlignment
 import org.koin.androidx.compose.getViewModel
@@ -111,8 +113,7 @@ fun Search(navController: NavHostController, viewModel: MainViewModel = getViewM
 
                 Row(Modifier.padding(0.dp, 10.dp, 0.dp, 0.dp)) {
 
-                    TextField(
-                        modifier = Modifier.background(Color.Red),
+                    OutlinedTextField(
                         value = viewModel.search,
                         //onTextInputStarted = { searchMode = true },
                         onValueChange = { viewModel.setSearchQuery(it); viewModel.search = it },
@@ -121,7 +122,8 @@ fun Search(navController: NavHostController, viewModel: MainViewModel = getViewM
                             if (action == ImeAction.Done) {
                                 softwareController!!.hideSoftwareKeyboard()
                             }
-                        }
+                        },
+                        inactiveColor = Color.White
                     )
 
                     //Hidde quotes and transitate to SearchDisable
